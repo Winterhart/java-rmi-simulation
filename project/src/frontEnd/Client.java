@@ -2,7 +2,6 @@ package frontEnd;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
 import shared.IHRActions;
 
 public class Client {
