@@ -6,11 +6,15 @@ import java.util.List;
 import model.Employee;
 import model.Manager;
 import model.Project;
+import storage.IStore;
 
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
-	public HRActions() throws RemoteException {
+	IStore store;
+	
+	public HRActions(IStore storingEngine) throws RemoteException {
 		super();
+		this.store = storingEngine;
 	}
 
 	@Override
@@ -37,6 +41,14 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	public boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void sayHello() throws RemoteException {
+		System.out.println("Hi/Hello");
+		store.writeToFile("hi");
+		
+		
 	}
 
 }

@@ -68,5 +68,9 @@ public interface IHRActions extends Remote {
 		or failure, it returns a message to the manager and the logs are updated
 	 */
 	public boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException;
+	
+	public void sayHello() throws RemoteException;
+	
+	
 
 }
