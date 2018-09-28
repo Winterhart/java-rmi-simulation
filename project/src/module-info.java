@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author winterhart
- *
- */
-module project {
-}

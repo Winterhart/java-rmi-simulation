@@ -5,8 +5,23 @@ import java.util.List;
 public class Manager extends Employee {
 
 	private Location location;
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public List<Project> getCurrentProjects() {
+		return currentProjects;
+	}
+
+	public void setCurrentProjects(List<Project> currentProjects) {
+		this.currentProjects = currentProjects;
+	}
+
 	private List<Project> currentProjects;
-	private enum Location{ CA,US,UK }
 	
 	public Manager(String firstName, String lastName, String mailID, 
 			List<Project> projects, Location location) {
