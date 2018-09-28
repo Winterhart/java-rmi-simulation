@@ -11,7 +11,7 @@ import storage.IStore;
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	IStore store;
-	
+	private boolean isAuthenticated = false;
 	public HRActions(IStore storingEngine) throws RemoteException {
 		super();
 		this.store = storingEngine;
@@ -44,11 +44,18 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public void sayHello() throws RemoteException {
-		System.out.println("Hi/Hello");
-		store.writeLog("hi", "Log.txt");
-		
-		
+	public String sayHello() throws RemoteException {
+		String serverStatus = "--------------------------------------------- " +
+					"Welcome to " + store.getStorageName() + " Server ";		
+		store.writeLog(serverStatus, "Log.txt");
+		return serverStatus;
+	}
+
+
+	@Override
+	public String login(String id) throws RemoteException {
+		isAuthenticated = true;
+		return "Thanks...";
 	}
 
 }

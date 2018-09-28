@@ -42,4 +42,9 @@ public class Logger implements IStore {
 		
 	}
 
+	@Override
+	public String getStorageName() {
+		return this.LoggerName;
+	}
+
 }

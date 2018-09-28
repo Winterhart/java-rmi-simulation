@@ -69,7 +69,9 @@ public interface IHRActions extends Remote {
 	 */
 	public boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException;
 	
-	public void sayHello() throws RemoteException;
+	public String sayHello() throws RemoteException;
+	
+	public String login(String id) throws RemoteException;
 	
 	
 

@@ -12,8 +12,13 @@ public class Client {
 		sum.sayHello();
 		System.out.println("Client is off... ");
 		
-		Registry rege = LocateRegistry.getRegistry(7777); 
-		IHRActions sume = (IHRActions) rege.lookup("US");
+		Registry regeUS = LocateRegistry.getRegistry(7777); 
+		IHRActions sumeUS = (IHRActions) regeUS.lookup("US");
+		sumeUS.sayHello();
+		System.out.println("Client is off... ");
+		
+		Registry regeUS2 = LocateRegistry.getRegistry(7777); 
+		IHRActions sumeUS2 = (IHRActions) rege.lookup("US");
 		sume.sayHello();
 		System.out.println("Client is off... ");
 		
