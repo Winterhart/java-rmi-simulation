@@ -46,7 +46,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	@Override
 	public void sayHello() throws RemoteException {
 		System.out.println("Hi/Hello");
-		store.writeToFile("hi");
+		store.writeLog("hi", "Log.txt");
 		
 		
 	}

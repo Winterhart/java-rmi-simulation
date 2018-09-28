@@ -2,7 +2,7 @@ package storage;
 
 public interface IStore {
 
-	public void writeToFile(String message);
+	public void writeLog(String message, String fileName);
 	
 	public String printAllFile();
 }
