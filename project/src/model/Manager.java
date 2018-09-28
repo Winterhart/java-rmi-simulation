@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Manager extends Employee {
 
+	private String managerID;
 	private Location location;
 	public Location getLocation() {
 		return location;
@@ -23,12 +24,23 @@ public class Manager extends Employee {
 
 	private List<Project> currentProjects;
 	
-	public Manager(String firstName, String lastName, String mailID, 
+	public Manager(String recordId, String managerId, String firstName, String lastName, String mailID, 
 			List<Project> projects, Location location) {
 		
-		super(firstName, lastName, mailID, projects.get(0).getProjectID());
+		super(recordId, firstName, lastName, mailID, projects.get(0).getProjectID());
+		//TODO:  Verify MangerID is okay
+		
+		this.setManagerID(managerId);
 		this.location = location;
 		this.currentProjects = projects;
+	}
+
+	public String getManagerID() {
+		return managerID;
+	}
+
+	public void setManagerID(String managerID) {
+		this.managerID = managerID;
 	}
 
 }
