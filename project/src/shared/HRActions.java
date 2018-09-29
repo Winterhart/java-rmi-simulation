@@ -11,7 +11,7 @@ import storage.IStore;
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	IStore store;
-	private boolean isAuthenticated = false;
+	private Boolean isAuthenticated = false;
 	public HRActions(IStore storingEngine) throws RemoteException {
 		super();
 		this.store = storingEngine;
@@ -57,5 +57,12 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		isAuthenticated = true;
 		return "Thanks...";
 	}
+
+	@Override
+	public Boolean getLoginStatus() throws RemoteException {
+		return isAuthenticated;
+	}
+	
+	
 
 }

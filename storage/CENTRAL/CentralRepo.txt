@@ -7,3 +7,6 @@ The Server: UK is on port:  4444    who: ServerConfigurator   when: Fri Sep 28 1
 The Server: CA is on port:  5555    who: ServerConfigurator   when: Fri Sep 28 14:41:05 EDT 2018
 The Server: US is on port:  7777    who: ServerConfigurator   when: Fri Sep 28 14:41:05 EDT 2018
 The Server: UK is on port:  4444    who: ServerConfigurator   when: Fri Sep 28 14:41:05 EDT 2018
+The Server: CA is on port:  5555    who: ServerConfigurator   when: Fri Sep 28 20:25:55 EDT 2018
+The Server: US is on port:  7777    who: ServerConfigurator   when: Fri Sep 28 20:25:55 EDT 2018
+The Server: UK is on port:  4444    who: ServerConfigurator   when: Fri Sep 28 20:25:55 EDT 2018

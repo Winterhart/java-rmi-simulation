@@ -1,1 +1,2 @@
 hi    who: CA   when: Fri Sep 28 14:41:25 EDT 2018
+--------------------------------------------- Welcome to CA Server     who: CA   when: Fri Sep 28 20:25:58 EDT 2018

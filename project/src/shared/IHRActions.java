@@ -7,8 +7,7 @@ import model.*;
 
 public interface IHRActions extends Remote {
 	
-	
-	
+
 	/**
 	 * 
 	 * When a manager invokes this method from his/her center through a client program
@@ -72,6 +71,8 @@ public interface IHRActions extends Remote {
 	public String sayHello() throws RemoteException;
 	
 	public String login(String id) throws RemoteException;
+	
+	public Boolean getLoginStatus() throws RemoteException;
 	
 	
 
