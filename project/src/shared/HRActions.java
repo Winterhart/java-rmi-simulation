@@ -22,20 +22,29 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	Map<Integer, RecordList> db;
+	private Map<Integer, RecordList> db;
 	IStore store;
 	public HRActions(IStore storingEngine) throws RemoteException {
 		super();
 		this.store = storingEngine;
 		db = new HashMap<Integer, RecordList>();
 		
-		// Initialize the fake local database 
-		// Add 26 empty list... from A to Z
+
 		buildfakeDatabase();
-		
-		//TODO: Populate with existing record in .txt file...
+
+		restoreFromStorage();
 	}
 
+	private void restoreFromStorage() {
+		
+		//TODO: Populate with existing record in .txt file...
+		
+	}
+
+	/**
+	 * Initialize the fake local database 
+	Add 26 empty list... from A to Z
+	 */
 	private void buildfakeDatabase() {
 		
 		int i = 0;
@@ -51,14 +60,14 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	@Override
 	public synchronized  Manager createMRecord(String firstName, String lastName, String employeeID, String mailID,
 			List<Project> projects) throws RemoteException {
-		// TODO Auto-generated method stub
+		// TODO: Validate New Manager Data, Add it to the hashMap, Log and Store in Text
 		return null;
 	}
 
 	@Override
 	public synchronized  Employee createERecord(String firstName, String lastName, String employeeID, String mailID, String ProjectID)
 			throws RemoteException {
-		// TODO Auto-generated method stub
+		// TODO: Validate New Employee Data, Add it to the hashMap, Log and Store in Text
 		return null;
 	}
 
@@ -70,7 +79,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	@Override
 	public synchronized  boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException {
-		// TODO Auto-generated method stub
+		// TODO: Validate Request Data, Add it to the hashMap, Log and Store in Text
 		return false;
 	}
 	

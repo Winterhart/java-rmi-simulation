@@ -1,6 +1,6 @@
 package model;
 
-//TODO: Add logic for Emp. ID
+
 public class Employee extends Record {
 	private String firstName;
 	private String lastName;
@@ -44,7 +44,7 @@ public class Employee extends Record {
 		return employeeID;
 	}
 
-	private void setEmployeeID(String employeeID) {
+	public void setEmployeeID(String employeeID) {
 		this.employeeID = employeeID;
 	}
 

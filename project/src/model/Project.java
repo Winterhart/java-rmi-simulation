@@ -1,6 +1,4 @@
 package model;
-
-//TODO: Add logic for project Id
 public class Project {
 	private String projectID;
 	private String clientName;
@@ -8,7 +6,6 @@ public class Project {
 	
 	
 	public Project(String projectID, String clientName, String projectName) {
-		super();
 		this.projectID = projectID;
 		this.clientName = clientName;
 		this.projectName = projectName;
