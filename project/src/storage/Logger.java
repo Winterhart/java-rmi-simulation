@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Date;
+
+import model.Project;
+import model.Record;
+
 import java.io.IOException;
 
 public class Logger implements IStore {
@@ -15,12 +19,6 @@ public class Logger implements IStore {
 	public Logger(String name, String mainFolder) {
 		this.LoggerName = name;
 		this.currentTargetFolder = mainFolder;
-	}
-
-	@Override
-	public String printAllFile() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -45,6 +43,36 @@ public class Logger implements IStore {
 	@Override
 	public String getStorageName() {
 		return this.LoggerName;
+	}
+
+	@Override
+	public void addRecord(Record record) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addProject(Project project) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateRecordField(String recordId, String fieldName, String newVal) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String readAllProject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String readAllRecord() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,6 @@
 package model;
 
+//TODO: Add logic for Emp. ID
 public class Employee extends Record {
 	private String firstName;
 	private String lastName;

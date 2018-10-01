@@ -1,7 +1,7 @@
 package model;
 
 import java.util.List;
-
+//TODO: Add login for recordID
 public class Manager extends Employee {
 
 	private String managerID;

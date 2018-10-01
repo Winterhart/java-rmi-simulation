@@ -1,5 +1,6 @@
 package model;
 
+//TODO: Add logic for project Id
 public class Project {
 	private String projectID;
 	private String clientName;

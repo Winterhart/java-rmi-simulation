@@ -8,59 +8,48 @@ import model.Manager;
 import model.Project;
 import storage.IStore;
 
+//TODO: Send a log before doing an operation...
+//TODO: Implement all operation
+//TODO: Create the hashMap based on Last Name first letter
+//TODO: Ensure concurrency with Synchronized keyword
+//TODO: Implement the UDP/IP method
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	IStore store;
-	private Boolean isAuthenticated = false;
 	public HRActions(IStore storingEngine) throws RemoteException {
 		super();
 		this.store = storingEngine;
 	}
 
 	@Override
-	public Manager createMRecord(String firstName, String lastName, String employeeID, String mailID,
+	public synchronized  Manager createMRecord(String firstName, String lastName, String employeeID, String mailID,
 			List<Project> projects) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Employee createERecord(String firstName, String lastName, String employeeID, String mailID, String ProjectID)
+	public synchronized  Employee createERecord(String firstName, String lastName, String employeeID, String mailID, String ProjectID)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getRecordCount()  throws RemoteException {
+	public synchronized  String getRecordCount()  throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException {
+	public synchronized  boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public String sayHello() throws RemoteException {
-		String serverStatus = "--------------------------------------------- " +
-					"Welcome to " + store.getStorageName() + " Server ";		
-		store.writeLog(serverStatus, "Log.txt");
-		return serverStatus;
-	}
-
-
-	@Override
-	public String login(String id) throws RemoteException {
-		isAuthenticated = true;
-		return "Thanks...";
-	}
-
-	@Override
-	public Boolean getLoginStatus() throws RemoteException {
-		return isAuthenticated;
 	}
 	
 	
