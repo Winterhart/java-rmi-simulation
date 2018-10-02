@@ -41,6 +41,12 @@ public class Project {
 		this.projectName = projectName;
 	}
 	
+	@Override
+	public String toString() {
+		return "Project:" + projectID + "|" + 
+				clientName + "|" + projectName;
+	}
+	
 	
 
 }
