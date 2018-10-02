@@ -1,5 +1,6 @@
 package shared;
 
+import java.lang.reflect.Field;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import model.Employee;
 import model.Location;
 import model.Manager;
 import model.Project;
+import model.Record;
 import storage.IStore;
 
 //TODO: Send a log before doing an operation...
@@ -253,15 +255,86 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	@Override
 	public synchronized  String getRecordCount()  throws RemoteException {
-		// TODO Auto-generated method stub
+		// TODO Obtain Record Count from other server using UDP/IP
 		return null;
 	}
 
 	@Override
 	public synchronized  boolean editRecord(String recordID, String fieldName,
 			Object value) throws RemoteException {
-		// TODO: Validate Request Data, Add it to the hashMap, Log and Store in Text
-		return false;
+		
+		store.writeLog("Attemps to Update a Record...", DEFAULT_LOG_FILE);
+		// If the record is not a project/Employee/Manager
+		if(!currentRecordID.contains(recordID) && !currentProjectID.contains(recordID)) {
+			return false;
+		}
+		
+		// Record ID could be ER20222, MR20494, P20123
+		char firstLetter = recordID.toUpperCase().charAt(0);
+		switch (firstLetter){
+		case 'E':
+			Record erecord = FindRecordWithId(recordID);
+			return UpdateEmployee(erecord, fieldName, value);
+		case 'M':
+			Record mrecord = FindRecordWithId(recordID);
+			return UpdateManager(mrecord, fieldName, value);
+		case 'P':
+			Project project = FindProjectWithId(recordID);
+			return UpdateProject(project, fieldName, value);
+		default:
+			store.writeLog("editRecord... recordID Not Found", DEFAULT_LOG_FILE);
+			return false;
+			
+		}
+	}
+
+	/**
+	 * In the project all field can be updated, except ProjectID which == to RecordID
+	 * @param proj
+	 * @param fieldName
+	 * @param value
+	 * @return
+	 */
+	private boolean UpdateProject(Project proj, String fieldName, Object value) {
+
+		store.writeLog("Project Record Updated", DEFAULT_LOG_FILE);
+		return true;
+	}
+
+	/**
+	 * In Manager location, mailID, List of Project
+	 * @param mrecord
+	 * @param fieldName
+	 * @param value
+	 * @return
+	 */
+	private boolean UpdateManager(Record mrecord, String fieldName, Object value) {
+
+		store.writeLog("Manager Record Updated", DEFAULT_LOG_FILE);
+		return true;
+	}
+
+	/**
+	 * In Employee only MailID and projectID can be updated
+	 * @param record
+	 * @param fieldName
+	 * @param value
+	 * @return
+	 */
+	private boolean UpdateEmployee(Record record, String fieldName, Object value) {
+
+		store.writeLog("Employee Record Updated", DEFAULT_LOG_FILE);
+		return true;
+	}
+
+	private Project FindProjectWithId(String recordID) {
+
+		return null;
+	}
+
+	private Record FindRecordWithId(String recordID) {
+
+		return null;
 	}
 	
 	
