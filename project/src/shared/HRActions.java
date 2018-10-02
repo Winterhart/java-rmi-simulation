@@ -21,8 +21,6 @@ import storage.IStore;
 
 //TODO: Send a log before doing an operation...
 //TODO: Implement all operation
-//TODO: Create the hashMap based on Last Name first letter -> DONE
-//TODO: Ensure concurrency with Synchronized keyword -> DONE
 //TODO: Implement the UDP/IP method
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
