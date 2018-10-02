@@ -25,10 +25,12 @@ public class Manager extends Employee {
 
 
 	
-	public Manager(String recordId, String managerId, String firstName, String lastName, String mailID, 
+	public Manager(String recordId, String managerId, String firstName, 
+			String lastName, String mailID, 
 			List<Project> projects, Location location) {
 		
-		super(recordId, firstName, lastName, mailID, projects.get(0).getProjectID());
+		super(recordId, firstName, lastName, mailID, 
+				projects.get(0).getProjectID());
 		this.setManagerID(managerId);
 		this.location = location;
 		this.currentProjects = projects;

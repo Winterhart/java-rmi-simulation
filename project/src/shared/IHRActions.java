@@ -20,6 +20,7 @@ public interface IHRActions extends Remote {
 	 * @param employeeID
 	 * @param mailID
 	 * @param projects
+	 * @param location
 	 * @return The server returns information to the manager whether the operation
 	 *	was successful or not and both the server
 	 * @throws RemoteException
@@ -28,7 +29,7 @@ public interface IHRActions extends Remote {
 			String lastName, 
 			String employeeID, 
 			String mailID, 
-			List<Project> projects) throws RemoteException;
+			List<Project> projects, Location location) throws RemoteException;
 	
 	
 	/**

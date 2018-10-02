@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import model.Employee;
+import model.Location;
 import model.Manager;
 import model.Project;
 import storage.IStore;
@@ -26,10 +28,12 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String DEFAULT_LOG_FILE = "Log";
+	//TODO: Does data needs to be singleton ??? 
 	private Map<Integer, RecordList> db;
 	private List<Project> dbProject;
 	private List<String> currentRecordID;
 	private List<String> currentProjectID;
+	private List<String> currentManagerID;
 	IStore store;
 	public HRActions(IStore storingEngine) throws RemoteException {
 		super();
@@ -38,6 +42,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		dbProject = new ArrayList<Project>();
 		currentRecordID = new ArrayList<String>();
 		currentProjectID = new ArrayList<String>();
+		currentManagerID = new ArrayList<String>();
 		
 		buildfakeDatabase();
 		restoreFromStorage();
@@ -72,9 +77,89 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	@Override
 	public synchronized  Manager createMRecord(String firstName, String lastName, 
 			String employeeID, String mailID,
-			List<Project> projects) throws RemoteException {
-		// TODO: Validate New Manager Data, Add it to the hashMap, Log and Store in Text
+			List<Project> projects, Location location) throws RemoteException {
+		
+		
+		
+		store.writeLog("Attempt to write a new Manager", DEFAULT_LOG_FILE);
+		Manager newManager = null;
+		try {
+			//Validate EmployeeID: (7 letters, "ER" at beginning, and not already taken)
+			String employeeIDUpper = employeeID.toUpperCase();
+			if(employeeIDUpper.length() != 7 ||
+					!employeeIDUpper.startsWith("MR")) {
+				return null;
+			}
+			// If employee already exists... ?
+			if(currentRecordID.contains(employeeIDUpper)) {
+				return null;
+			}
+			
+			
+			// Validate Mail
+			if(emailIsNotValid(mailID)) {
+				return null;
+			}
+			
+			//Validate Project ID: Must already exists
+			for(Project proj: projects) {
+				if(!currentProjectID.contains(proj.getProjectID())) {
+					return null;
+				}
+			}
+
+			
+			
+			newManager = new Manager(employeeIDUpper, generateUniqueManagerId(location),
+					firstName, lastName, mailID, projects, location);
+			
+			//Obtain first Letter of LastName for DB
+			String lowerLastName = lastName.toLowerCase();
+			lowerLastName = lowerLastName.trim();
+			
+			Integer indexOfFirstLetter = getIndexFirstLetter(lowerLastName);
+			if(indexOfFirstLetter == null) {
+				return null;
+			}
+			
+			RecordList tmpList = db.get((int)indexOfFirstLetter);
+			
+			if(!tmpList.contains(newManager) && 
+					!currentRecordID.contains(newManager.getEmployeeID())
+					&& !currentManagerID.contains(newManager.getManagerID())) {
+				tmpList.add(newManager);
+				currentRecordID.add(newManager.getEmployeeID());
+				currentManagerID.add(newManager.getManagerID());
+			}
+			
+			// Add to the hashMap
+			db.replace((int)indexOfFirstLetter, tmpList);
+			// Add to the storage
+			store.addRecord(newManager);
+		
+			return newManager;
+			
+		}catch(Exception ee) {
+			
+			ee.printStackTrace();
+			store.writeLog(ee.getLocalizedMessage(), DEFAULT_LOG_FILE);
+		}
+
+		
 		return null;
+	}
+
+	private String generateUniqueManagerId(Location location) {
+		Random ran = new Random();
+		// From 1000 to 9999
+		int randomInt = ran.nextInt(8999) + 1000;
+		String managerId = location.toString() + Integer.toString(randomInt);
+		while(currentManagerID.contains(managerId)) {
+			randomInt = ran.nextInt(8999) + 1000;
+			managerId = location.toString() + Integer.toString(randomInt);
+		}
+		
+		return managerId;
 	}
 
 	@Override
@@ -82,6 +167,8 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			String employeeID, String mailID, String projectID)
 			throws RemoteException {
 		
+		
+		store.writeLog("Attempt to write a new Employee", DEFAULT_LOG_FILE);
 		Employee newEmployee = null;
 		
 		try {
@@ -103,7 +190,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			}
 			
 			//Validate Project ID: Must already exists
-			if(!currentProjectID.contains(projectID.toUpperCase())) {
+			if(!currentProjectID.contains(projectID)) {
 				return null;
 			}
 			
@@ -122,8 +209,10 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			RecordList tmpList = db.get((int)indexOfFirstLetter);
 			
-			if(!tmpList.contains(newEmployee)) {
+			if(!tmpList.contains(newEmployee) &&
+					!currentRecordID.contains(newEmployee.getEmployeeID())) {
 				tmpList.add(newEmployee);
+				currentRecordID.add(newEmployee.getEmployeeID());
 			}
 			
 			// Add to the hashMap
@@ -139,6 +228,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		return newEmployee;
 	}
 
+	
 	private Integer getIndexFirstLetter(String lowerLastName) {
 		char firstLetter = lowerLastName.charAt(0);
 		int index = 0;
