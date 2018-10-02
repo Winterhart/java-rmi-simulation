@@ -75,4 +75,10 @@ public class Logger implements IStore {
 		return null;
 	}
 
+	@Override
+	public void removeRecord(Record mrecord) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

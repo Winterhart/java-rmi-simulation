@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -268,18 +269,27 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		if(!currentRecordID.contains(recordID) && !currentProjectID.contains(recordID)) {
 			return false;
 		}
-		
+		// At this point, we know we have the record in our system
 		// Record ID could be ER20222, MR20494, P20123
 		char firstLetter = recordID.toUpperCase().charAt(0);
 		switch (firstLetter){
 		case 'E':
 			Record erecord = FindRecordWithId(recordID);
+			if(erecord == null) {
+				return false;
+			}
 			return UpdateEmployee(erecord, fieldName, value);
 		case 'M':
 			Record mrecord = FindRecordWithId(recordID);
+			if(mrecord == null) {
+				return false;
+			}
 			return UpdateManager(mrecord, fieldName, value);
 		case 'P':
 			Project project = FindProjectWithId(recordID);
+			if(project== null) {
+				return false;
+			}
 			return UpdateProject(project, fieldName, value);
 		default:
 			store.writeLog("editRecord... recordID Not Found", DEFAULT_LOG_FILE);
@@ -293,10 +303,21 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * @param proj
 	 * @param fieldName
 	 * @param value
-	 * @return
+	 * @return true if updated
 	 */
 	private boolean UpdateProject(Project proj, String fieldName, Object value) {
 
+		
+		String[] allowedFields = {"projectID", "clientName", "projectName"};
+		if(!Arrays.asList(allowedFields).contains(fieldName)) {
+			return false;
+		}
+		
+		try {
+			
+		}catch(Exception ee) {
+			
+		}
 		store.writeLog("Project Record Updated", DEFAULT_LOG_FILE);
 		return true;
 	}
@@ -306,12 +327,49 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * @param mrecord
 	 * @param fieldName
 	 * @param value
-	 * @return
+	 * @return true if updated
 	 */
 	private boolean UpdateManager(Record mrecord, String fieldName, Object value) {
 
-		store.writeLog("Manager Record Updated", DEFAULT_LOG_FILE);
-		return true;
+		
+		String[] allowedFields = {"location", "mailID", "currentProjects"};
+		if(!Arrays.asList(allowedFields).contains(fieldName)) {
+			return false;
+		}
+		
+		try {
+			
+			Manager tmpMan = (Manager)mrecord;
+			int indexList = getIndexFirstLetter(tmpMan.getLastName().toLowerCase());
+			RecordList tmpList = db.get(indexList);
+			tmpList.remove(mrecord);
+			store.removeRecord(mrecord);
+			
+			Field targetUpdate = mrecord.getClass().getDeclaredField(fieldName);
+			targetUpdate.setAccessible(true);
+			targetUpdate.set(tmpMan, value);
+			
+			if(fieldName.equals("location")) {
+				// Update the Manager ID with New Location ?
+				tmpMan.setManagerID(generateUniqueManagerId((Location)value));
+				currentManagerID.remove(tmpMan.getManagerID());
+				//TODO: Using UDP/IP create a new Manager on the other Server 
+			}else {
+				// Update internal db
+				tmpList.add(tmpMan);
+				db.replace(indexList, tmpList);
+				store.addRecord(mrecord);
+				
+			}
+			store.writeLog("Manager Record Updated", DEFAULT_LOG_FILE);			
+			return true;
+			
+		} catch (Exception e) {
+			store.writeLog("FieldName not found", DEFAULT_LOG_FILE);			
+			e.printStackTrace();
+			}
+		return false;
+
 	}
 
 	/**
@@ -319,22 +377,55 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * @param record
 	 * @param fieldName
 	 * @param value
-	 * @return
+	 * @return true if updated
 	 */
 	private boolean UpdateEmployee(Record record, String fieldName, Object value) {
 
+		String[] allowedFields = {"mailID", "projectID"};
+		if(!Arrays.asList(allowedFields).contains(fieldName)) {
+			return false;
+		}
+		
+		
 		store.writeLog("Employee Record Updated", DEFAULT_LOG_FILE);
 		return true;
 	}
-
+	/**
+	 * Finding a project record in our db of project
+	 * @param recordID
+	 * @return
+	 */
 	private Project FindProjectWithId(String recordID) {
-
-		return null;
+		Project foundProj = null;
+		
+		for(Project proj: dbProject) {
+			if(proj.getProjectID().equals(recordID)) {
+				return proj;
+			}
+		}
+		store.writeLog("Project Record Not Found", DEFAULT_LOG_FILE);
+		return foundProj;
 	}
 
+	/**
+	 * Finding a employee or Manager record in our db of Record
+	 * @param recordID
+	 * @return
+	 */
 	private Record FindRecordWithId(String recordID) {
 
-		return null;
+		Record foundRec  = null;
+		for(RecordList aList: db.values()) {
+			
+			for(Record rec: aList) {
+				if(rec.getRecordID().equals(recordID)) {
+					foundRec = rec;
+					return rec;
+				}
+			}
+		}
+		store.writeLog("Employee/Manager Record Not Found", DEFAULT_LOG_FILE);
+		return foundRec;
 	}
 	
 	
