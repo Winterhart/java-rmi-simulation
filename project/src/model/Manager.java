@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-//TODO: Add login for recordID
 public class Manager extends Employee {
 
 	private String managerID;
@@ -28,8 +27,6 @@ public class Manager extends Employee {
 			List<Project> projects, Location location) {
 		
 		super(recordId, firstName, lastName, mailID, projects.get(0).getProjectID());
-		//TODO:  Verify MangerID is okay
-		
 		this.setManagerID(managerId);
 		this.location = location;
 		this.currentProjects = projects;
@@ -41,6 +38,17 @@ public class Manager extends Employee {
 
 	public void setManagerID(String managerID) {
 		this.managerID = managerID;
+	}
+	
+	@Override
+	public String toString() {
+		return getEmployeeID() + "|" + getFirstName() + 
+				"|" + getLastName() + "|" + getMailID() 
+				+ "|" + getAllProjectId() + "|" + location;
+	}
+
+	private String getAllProjectId() {
+		return "222";
 	}
 
 }

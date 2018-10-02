@@ -50,9 +50,6 @@ public class Employee extends Record {
 
 	public Employee(String employeeId, String firstName, String lastName, String mailID, String projectID) {
 		super(employeeId);
-		
-		//TODO: Ensure Employee Id is okay
-		
 		this.employeeID = employeeId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -60,6 +57,10 @@ public class Employee extends Record {
 		this.projectID = projectID;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return employeeID + "|" + firstName + "|"
+				+ lastName + "|" + mailID + "|" + projectID; 
+	}
 
 }
