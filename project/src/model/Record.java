@@ -17,7 +17,7 @@ public class Record {
 	}
 	
 	public String toString() {
-		return recordID;
+		return "Record:" + recordID;
 	}
 	
 	

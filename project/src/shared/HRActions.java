@@ -43,12 +43,11 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	/**
 	 * Initialize the fake local database 
-	Add 26 empty list... from A to Z
+	 * Add 26 empty list... from A to Z
 	 */
 	private void buildfakeDatabase() {
 		
-		int i = 0;
-		for(char alphabet = 'a'; alphabet <='z'; alphabet++ )
+		for(int i = 0; i < 26; i++)
 	    {
 			RecordList list = new RecordList();
 			db.put(i, list);

@@ -5,6 +5,8 @@ public class Manager extends Employee {
 
 	private String managerID;
 	private Location location;
+	private List<Project> currentProjects;
+	
 	public Location getLocation() {
 		return location;
 	}
@@ -21,7 +23,7 @@ public class Manager extends Employee {
 		this.currentProjects = currentProjects;
 	}
 
-	private List<Project> currentProjects;
+
 	
 	public Manager(String recordId, String managerId, String firstName, String lastName, String mailID, 
 			List<Project> projects, Location location) {
@@ -42,13 +44,18 @@ public class Manager extends Employee {
 	
 	@Override
 	public String toString() {
-		return getEmployeeID() + "|" + getFirstName() + 
+		return "Manager:" + getEmployeeID() + "|" + getFirstName() + 
 				"|" + getLastName() + "|" + getMailID() 
 				+ "|" + getAllProjectId() + "|" + location;
 	}
 
 	private String getAllProjectId() {
-		return "222";
+		StringBuilder allProjects = new StringBuilder();
+		for(Project proj : currentProjects) {
+			allProjects.append(proj.getProjectID());
+			allProjects.append(", ");
+		}
+		return allProjects.toString();
 	}
 
 }
