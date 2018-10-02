@@ -81,4 +81,10 @@ public class Logger implements IStore {
 		
 	}
 
+	@Override
+	public void removeProject(Project proj) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -308,18 +308,30 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	private boolean UpdateProject(Project proj, String fieldName, Object value) {
 
 		
-		String[] allowedFields = {"projectID", "clientName", "projectName"};
+		String[] allowedFields = {"clientName", "projectName"};
 		if(!Arrays.asList(allowedFields).contains(fieldName)) {
 			return false;
 		}
 		
 		try {
 			
-		}catch(Exception ee) {
+			dbProject.remove(proj);
+			store.removeProject(proj);
+			// Use Reflection to Update Project
+			Field targetUpdate = proj.getClass().getDeclaredField(fieldName);
+			targetUpdate.setAccessible(true);
+			targetUpdate.set(proj, value);
+			dbProject.add(proj);
+			store.addProject(proj);
+			store.writeLog("Project Record Updated", DEFAULT_LOG_FILE);
+			return true;
 			
+		}catch(Exception ee) {
+			ee.printStackTrace();
+			store.writeLog("Exception while updating project", DEFAULT_LOG_FILE);
+			return true;
 		}
-		store.writeLog("Project Record Updated", DEFAULT_LOG_FILE);
-		return true;
+
 	}
 
 	/**
@@ -386,9 +398,33 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			return false;
 		}
 		
+		try {
+			
+
+			Employee tmpEmp = (Employee)record;
+			
+			int indexList = getIndexFirstLetter(tmpEmp.getLastName().toLowerCase());
+			RecordList tmpList = db.get(indexList);
+			tmpList.remove(record);
+			store.removeRecord(record);
+			
+			Field targetUpdate = record.getClass().getDeclaredField(fieldName);
+			targetUpdate.setAccessible(true);
+			targetUpdate.set(tmpEmp, value);
+			
+			tmpList.add(tmpEmp);
+			store.addRecord(record);
+			
+			db.replace(indexList, tmpList);
+			store.writeLog("Employee Record Updated", DEFAULT_LOG_FILE);
+			return true;
+			
+		}catch(Exception ee) {
+			store.writeLog("Problem while updating employee", DEFAULT_LOG_FILE);
+			return false;
+		}
 		
-		store.writeLog("Employee Record Updated", DEFAULT_LOG_FILE);
-		return true;
+
 	}
 	/**
 	 * Finding a project record in our db of project

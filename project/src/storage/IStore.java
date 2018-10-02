@@ -20,6 +20,8 @@ public interface IStore {
 	public String readAllRecord();
 
 	public void removeRecord(Record mrecord);
+
+	public void removeProject(Project proj);
 	
 	
 }
