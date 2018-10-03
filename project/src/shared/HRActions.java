@@ -76,7 +76,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public synchronized  Manager createMRecord(String firstName, String lastName, 
+	public synchronized String createMRecord(String firstName, String lastName, 
 			String employeeID, String mailID,
 			List<Project> projects, Location location) throws RemoteException {
 		
@@ -138,7 +138,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			// Add to the storage
 			store.addRecord(newManager);
 		
-			return newManager;
+			return newManager.getEmployeeID();
 			
 		}catch(Exception ee) {
 			
@@ -164,7 +164,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public synchronized  void createERecord(String firstName, String lastName, 
+	public synchronized String createERecord(String firstName, String lastName, 
 			String employeeID, String mailID, String projectID)
 			throws RemoteException {
 		
@@ -178,25 +178,25 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			String employeeIDUpper = employeeID.toUpperCase();
 			if(employeeIDUpper.length() != 7 || !employeeIDUpper.startsWith("ER")) {
 				store.writeLog("Employee ID not valid", DEFAULT_LOG_FILE);
-				//return null;
+				return null;
 			}
 			// If employee already exists... ?
 			if(currentRecordID.contains(employeeIDUpper)) {
 				store.writeLog("Employee Already exists", DEFAULT_LOG_FILE);
-				//return null;
+				return null;
 			}
 			
 			
 			// Validate Mail
 			if(!emailIsNotValid(mailID)) {
 				store.writeLog("Email not in valid format", DEFAULT_LOG_FILE);
-				//return null;
+				return null;
 			}
 			
 			//Validate Project ID: Must already exists
 			if(!currentProjectID.contains(projectID)) {
 				store.writeLog("Project doesn't exists", DEFAULT_LOG_FILE);
-				//return null;
+				return null;
 			}
 			
 			
@@ -209,10 +209,13 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			Integer indexOfFirstLetter = getIndexFirstLetter(lowerLastName);
 			if(indexOfFirstLetter == null) {
-				//return null;
+				return null;
 			}
 			ArrayList<Record> tmpList = new ArrayList<Record>();
-			tmpList = db.get((int)indexOfFirstLetter);
+			
+			if(db.get((int)indexOfFirstLetter) != null) {
+				tmpList = db.get((int)indexOfFirstLetter);
+			}
 			
 			if( tmpList != null && tmpList.size() > 0) {
 				if(tmpList.contains(newEmployee)) {
@@ -233,11 +236,13 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			db.replace((int)indexOfFirstLetter, tmpList);
 			// Add to the storage
 			store.addRecord(newEmployee);
+			return newEmployee.getEmployeeID();
 			
 		}catch(Exception ee) {
 			ee.printStackTrace();
 			String problem = ee.getMessage();
 			store.writeLog("Exception in Create Employee" + problem, DEFAULT_LOG_FILE);
+			return null;
 		}
 		
 		//return newEmployee;
@@ -477,30 +482,30 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public void createProject(String projectID, String clientName, String projectName) throws RemoteException {
+	public String createProject(String projectID, String clientName, String projectName) throws RemoteException {
 		store.writeLog("Attempt to write a new Project", DEFAULT_LOG_FILE);
 		char firstChar = projectID.toLowerCase().charAt(0);
 		if(projectID.length() != 6 || firstChar != 'p') {
 			store.writeLog("Wrong project ID format ", DEFAULT_LOG_FILE);
-			//return null;
+			return null;
 		}
 		try {
 			Project newProj = new Project(projectID, clientName, projectName);
 			if(dbProject.contains(newProj)) {
 				store.writeLog("Project Already Exists", DEFAULT_LOG_FILE);
-				//return null;
+				return null;
 			}
 			
 			dbProject.add(newProj);
 			currentProjectID.add(projectID);
 			store.addProject(newProj);
 			
-			//return newProj;
+			return "NEW PROJECT";
 			
 		}catch(Exception ee) {
 			store.writeLog("Problem while creating a project", DEFAULT_LOG_FILE);
 			ee.printStackTrace();
-			//return null;
+			return null;
 		}
 		
 

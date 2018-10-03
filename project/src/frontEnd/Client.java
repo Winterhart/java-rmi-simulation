@@ -17,8 +17,8 @@ public class Client {
 	public static void main(String[] args) throws Exception {
 		Registry reg = LocateRegistry.getRegistry(5555); 
 		IHRActions sum = (IHRActions) reg.lookup("CA");
-		sum.createProject("P00001", "Marcel Foobar", "AnotherBlockChainSoftware");
-		sum.createERecord("Bob", "Bobinson", "ER20321", "bob.bobinson@bobbob.com", "P00001");
+		String projct= sum.createProject("P00001", "Marcel Foobar", "AnotherBlockChainSoftware");
+		String empID = sum.createERecord("Bob", "Bobinson", "ER20321", "bob.bobinson@bobbob.com", "P00001");
 		System.out.println("Client is off... ");
 		
 
