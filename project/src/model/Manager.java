@@ -60,4 +60,40 @@ public class Manager extends Employee {
 		return allProjects.toString();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((currentProjects == null) ? 0 : currentProjects.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((managerID == null) ? 0 : managerID.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Manager other = (Manager) obj;
+		if (currentProjects == null) {
+			if (other.currentProjects != null)
+				return false;
+		} else if (!currentProjects.equals(other.currentProjects))
+			return false;
+		if (location != other.location)
+			return false;
+		if (managerID == null) {
+			if (other.managerID != null)
+				return false;
+		} else if (!managerID.equals(other.managerID))
+			return false;
+		return true;
+	}
+	
+	
+
 }

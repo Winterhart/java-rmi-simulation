@@ -13,8 +13,6 @@ public interface IStore {
 	
 	public void addProject(Project project);
 	
-	public void updateRecordField(String recordId, String fieldName, String newVal);
-	
 	public String readAllProject();
 	
 	public String readAllRecord();

@@ -63,4 +63,55 @@ public class Employee extends Record {
 				+ lastName + "|" + mailID + "|" + projectID; 
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((employeeID == null) ? 0 : employeeID.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((mailID == null) ? 0 : mailID.hashCode());
+		result = prime * result + ((projectID == null) ? 0 : projectID.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		if (employeeID == null) {
+			if (other.employeeID != null)
+				return false;
+		} else if (!employeeID.equals(other.employeeID))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (mailID == null) {
+			if (other.mailID != null)
+				return false;
+		} else if (!mailID.equals(other.mailID))
+			return false;
+		if (projectID == null) {
+			if (other.projectID != null)
+				return false;
+		} else if (!projectID.equals(other.projectID))
+			return false;
+		return true;
+	}
+	
+	
+
 }

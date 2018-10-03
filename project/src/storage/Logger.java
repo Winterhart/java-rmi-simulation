@@ -15,7 +15,8 @@ public class Logger implements IStore {
 	
 	private String LoggerName;
 	private String currentTargetFolder;
-	
+	private String DEFAULT_RECORD_FILE_NAME = "Records.txt";
+	private String DEFAULT_PROJECT_FILE_NAME = "Projects.txt";
 	public Logger(String name, String mainFolder) {
 		this.LoggerName = name;
 		this.currentTargetFolder = mainFolder;
@@ -47,19 +48,37 @@ public class Logger implements IStore {
 
 	@Override
 	public void addRecord(Record record) {
-		// TODO Auto-generated method stub
+		Date date = new Date();
+		try {
+			FileWriter writer = new FileWriter(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME,   true);
+			BufferedWriter bWriter = new BufferedWriter(writer);
+			bWriter.append(record.toString());
+			bWriter.append("    who: " + LoggerName);
+			bWriter.append("   when: " + date.toString());
+			bWriter.newLine();
+			bWriter.close();
+			
+		}catch(IOException ee) {
+			ee.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void addProject(Project project) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateRecordField(String recordId, String fieldName, String newVal) {
-		// TODO Auto-generated method stub
+		Date date = new Date();
+		try {
+			FileWriter writer = new FileWriter(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME,   true);
+			BufferedWriter bWriter = new BufferedWriter(writer);
+			bWriter.append(project.toString());
+			bWriter.append("    who: " + LoggerName);
+			bWriter.append("   when: " + date.toString());
+			bWriter.newLine();
+			bWriter.close();
+			
+		}catch(IOException ee) {
+			ee.printStackTrace();
+		}
 		
 	}
 

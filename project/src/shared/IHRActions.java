@@ -43,7 +43,7 @@ public interface IHRActions extends Remote {
 	 * @return The server returns information to the manager whether the operation was successful or not
 	 * @throws RemoteException
 	 */
-	public Employee createERecord(String firstName, 
+	public void createERecord(String firstName, 
 			String lastName, 
 			String employeeID,
 			String mailID, 
@@ -68,6 +68,8 @@ public interface IHRActions extends Remote {
 		or failure, it returns a message to the manager and the logs are updated
 	 */
 	public boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException;
+	
+	public void createProject(String projectID, String clientName, String projectName) throws RemoteException;
 	
 	
 

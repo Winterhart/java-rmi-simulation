@@ -28,7 +28,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String DEFAULT_LOG_FILE = "Log";
+	private String DEFAULT_LOG_FILE = "Log.txt";
 	//TODO: Does data needs to be singleton ??? 
 	private Map<Integer, RecordList> db;
 	private List<Project> dbProject;
@@ -51,7 +51,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	private void restoreFromStorage() {
 		
-		store.writeLog("Restoring Data from Storage...", "Log");
+		store.writeLog("Restoring Data from Storage...", DEFAULT_LOG_FILE);
 		
 		//TODO: Restore Project List from txt file
 		//TODO: Restore Record List from main recordList
@@ -164,7 +164,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public synchronized  Employee createERecord(String firstName, String lastName, 
+	public synchronized  void createERecord(String firstName, String lastName, 
 			String employeeID, String mailID, String projectID)
 			throws RemoteException {
 		
@@ -177,22 +177,26 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			//Validate EmployeeID: (7 letters, "ER" at beginning, and not already taken)
 			String employeeIDUpper = employeeID.toUpperCase();
 			if(employeeIDUpper.length() != 7 || !employeeIDUpper.startsWith("ER")) {
-				return null;
+				store.writeLog("Employee ID not valid", DEFAULT_LOG_FILE);
+				//return null;
 			}
 			// If employee already exists... ?
 			if(currentRecordID.contains(employeeIDUpper)) {
-				return null;
+				store.writeLog("Employee Already exists", DEFAULT_LOG_FILE);
+				//return null;
 			}
 			
 			
 			// Validate Mail
-			if(emailIsNotValid(mailID)) {
-				return null;
+			if(!emailIsNotValid(mailID)) {
+				store.writeLog("Email not in valid format", DEFAULT_LOG_FILE);
+				//return null;
 			}
 			
 			//Validate Project ID: Must already exists
 			if(!currentProjectID.contains(projectID)) {
-				return null;
+				store.writeLog("Project doesn't exists", DEFAULT_LOG_FILE);
+				//return null;
 			}
 			
 			
@@ -205,16 +209,25 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			Integer indexOfFirstLetter = getIndexFirstLetter(lowerLastName);
 			if(indexOfFirstLetter == null) {
-				return null;
+				//return null;
+			}
+			RecordList tmpList = new RecordList();
+			tmpList = db.get((int)indexOfFirstLetter);
+			
+			if( tmpList != null && tmpList.size() > 0) {
+				if(tmpList.contains(newEmployee)) {
+					tmpList.remove(newEmployee);
+				}
 			}
 			
-			RecordList tmpList = db.get((int)indexOfFirstLetter);
-			
-			if(!tmpList.contains(newEmployee) &&
-					!currentRecordID.contains(newEmployee.getEmployeeID())) {
-				tmpList.add(newEmployee);
-				currentRecordID.add(newEmployee.getEmployeeID());
+			if(currentRecordID != null && currentRecordID.size() > 0) {
+				if(currentRecordID.contains(newEmployee.getEmployeeID())) {
+					currentRecordID.remove(newEmployee.getEmployeeID());
+				}
 			}
+			
+			tmpList.add(newEmployee);
+			currentRecordID.add(newEmployee.getEmployeeID());
 			
 			// Add to the hashMap
 			db.replace((int)indexOfFirstLetter, tmpList);
@@ -223,10 +236,11 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 		}catch(Exception ee) {
 			ee.printStackTrace();
-			store.writeLog(ee.getLocalizedMessage(), DEFAULT_LOG_FILE);
+			String problem = ee.getMessage();
+			store.writeLog("Exception in Create Employee" + problem, DEFAULT_LOG_FILE);
 		}
 		
-		return newEmployee;
+		//return newEmployee;
 	}
 
 	
@@ -460,6 +474,36 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		}
 		store.writeLog("Employee/Manager Record Not Found", DEFAULT_LOG_FILE);
 		return foundRec;
+	}
+
+	@Override
+	public void createProject(String projectID, String clientName, String projectName) throws RemoteException {
+		store.writeLog("Attempt to write a new Project", DEFAULT_LOG_FILE);
+		char firstChar = projectID.toLowerCase().charAt(0);
+		if(projectID.length() != 6 || firstChar != 'p') {
+			store.writeLog("Wrong project ID format ", DEFAULT_LOG_FILE);
+			//return null;
+		}
+		try {
+			Project newProj = new Project(projectID, clientName, projectName);
+			if(dbProject.contains(newProj)) {
+				store.writeLog("Project Already Exists", DEFAULT_LOG_FILE);
+				//return null;
+			}
+			
+			dbProject.add(newProj);
+			currentProjectID.add(projectID);
+			store.addProject(newProj);
+			
+			//return newProj;
+			
+		}catch(Exception ee) {
+			store.writeLog("Problem while creating a project", DEFAULT_LOG_FILE);
+			ee.printStackTrace();
+			//return null;
+		}
+		
+
 	}
 	
 	
