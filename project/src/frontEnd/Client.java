@@ -19,6 +19,7 @@ public class Client {
 		IHRActions sum = (IHRActions) reg.lookup("CA");
 		String projct= sum.createProject("P00001", "Marcel Foobar", "AnotherBlockChainSoftware");
 		String empID = sum.createERecord("Bob", "Bobinson", "ER20321", "bob.bobinson@bobbob.com", "P00001");
+		System.out.println(projct);
 		System.out.println("Client is off... ");
 		
 

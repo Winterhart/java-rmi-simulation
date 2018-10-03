@@ -500,7 +500,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			currentProjectID.add(projectID);
 			store.addProject(newProj);
 			
-			return "NEW PROJECT";
+			return store.readAllProject();
 			
 		}catch(Exception ee) {
 			store.writeLog("Problem while creating a project", DEFAULT_LOG_FILE);

@@ -1,7 +1,10 @@
 package storage;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -34,7 +37,7 @@ public class Logger implements IStore {
 			bWriter.append("   when: " + date.toString());
 			bWriter.newLine();
 			bWriter.close();
-			
+			writer.close();
 		}catch(IOException ee) {
 			ee.printStackTrace();
 		}
@@ -57,6 +60,7 @@ public class Logger implements IStore {
 			bWriter.append("   when: " + date.toString());
 			bWriter.newLine();
 			bWriter.close();
+			writer.close();
 			
 		}catch(IOException ee) {
 			ee.printStackTrace();
@@ -75,6 +79,7 @@ public class Logger implements IStore {
 			bWriter.append("   when: " + date.toString());
 			bWriter.newLine();
 			bWriter.close();
+			writer.close();
 			
 		}catch(IOException ee) {
 			ee.printStackTrace();
@@ -84,26 +89,153 @@ public class Logger implements IStore {
 
 	@Override
 	public String readAllProject() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME);
+			BufferedReader bReader = new BufferedReader(reader);
+			StringBuffer buff = new StringBuffer();
+			String line;
+			while( (line = bReader.readLine()) != null) {
+				if(line.contains("Project")) {
+					buff.append(line);
+				}				
+			}				
+			bReader.close();
+			reader.close();
+			return buff.toString();			
+		}catch(IOException ee) {
+			ee.printStackTrace();
+			return "";
+		}
 	}
 
 	@Override
 	public String readAllRecord() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME);
+			BufferedReader bReader = new BufferedReader(reader);
+			StringBuffer buff = new StringBuffer();
+			String line;
+			while( (line = bReader.readLine()) != null) {
+				if(line.contains("Record")) {
+					buff.append(line);
+				}				
+			}					
+			return buff.toString();			
+		}catch(IOException ee) {
+			ee.printStackTrace();
+			return "";
+		}
 	}
 
 	@Override
 	public void removeRecord(Record mrecord) {
-		// TODO Auto-generated method stub
+		int lineNumberToRemove = findRecord(mrecord);
+		if(lineNumberToRemove == 0) {
+			return;
+		}
+		try {
+			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME);
+			BufferedReader bReader = new BufferedReader(reader);
+			int index = 0;
+			String line;
+			String allFile = "";
+			while((line = bReader.readLine()) != null) {
+				if(index == lineNumberToRemove) {
+					line = "";
+				}
+				index++;
+				allFile += line + '\n';
+			}
+			
+			FileOutputStream output = new FileOutputStream(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME);
+			output.write(allFile.getBytes());
+			output.close();
+			bReader.close();
+			reader.close();
+			
+		}catch(IOException ee) {
+			ee.printStackTrace();
+		}
 		
+	}
+
+	private int findRecord(Record mrecord) {
+		try {
+			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME);
+			BufferedReader bReader = new BufferedReader(reader);
+			StringBuffer buff = new StringBuffer();
+			String line;
+			int lineNumber = 0;
+			while( (line = bReader.readLine()) != null) {
+				if(line.contains(mrecord.getRecordID())) {
+					// We found the line
+					bReader.close();
+					reader.close();
+					return lineNumber;
+				}
+				lineNumber++;
+			}
+			
+			return 0;
+		}catch(IOException ee) {
+			ee.printStackTrace();
+			return 0;
+		}
 	}
 
 	@Override
 	public void removeProject(Project proj) {
-		// TODO Auto-generated method stub
+		int lineNumberToRemove = findProject(proj);
+		if(lineNumberToRemove == 0) {
+			return;
+		}
+		try {
+			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME);
+			BufferedReader bReader = new BufferedReader(reader);
+			int index = 0;
+			String line;
+			String allFile = "";
+			while((line = bReader.readLine()) != null) {
+				if(index == lineNumberToRemove) {
+					line = "";
+				}
+				index++;
+				allFile += line + '\n';
+			}
+			
+			FileOutputStream output = new FileOutputStream(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME);
+			output.write(allFile.getBytes());
+			output.close();
+			bReader.close();
+			reader.close();
+			
+		}catch(IOException ee) {
+			ee.printStackTrace();
+		}
 		
+	}
+
+	private int findProject(Project proj) {
+		try {
+			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME);
+			BufferedReader bReader = new BufferedReader(reader);
+			StringBuffer buff = new StringBuffer();
+			String line;
+			int lineNumber = 0;
+			while( (line = bReader.readLine()) != null) {
+				if(line.contains(proj.getProjectID())) {
+					// We found the line
+					bReader.close();
+					reader.close();
+					return lineNumber;
+				}
+				lineNumber++;
+			}
+			return 0;
+		}catch(IOException ee) {
+			ee.printStackTrace();
+			return 0;
+		}
 	}
 
 }
