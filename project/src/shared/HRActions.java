@@ -30,7 +30,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	private static final long serialVersionUID = 1L;
 	private String DEFAULT_LOG_FILE = "Log.txt";
 	//TODO: Does data needs to be singleton ??? 
-	private Map<Integer, RecordList> db;
+	private Map<Integer, ArrayList<Record>> db;
 	private List<Project> dbProject;
 	private List<String> currentRecordID;
 	private List<String> currentProjectID;
@@ -39,7 +39,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	public HRActions(IStore storingEngine) throws RemoteException {
 		super();
 		this.store = storingEngine;
-		db = new HashMap<Integer, RecordList>();
+		db = new HashMap<Integer, ArrayList<Record>>();
 		dbProject = new ArrayList<Project>();
 		currentRecordID = new ArrayList<String>();
 		currentProjectID = new ArrayList<String>();
@@ -68,7 +68,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		
 		for(int i = 0; i < 26; i++)
 	    {
-			RecordList list = new RecordList();
+			ArrayList<Record> list = new ArrayList<Record>();
 			db.put(i, list);
 			i++;
 	    }
@@ -123,7 +123,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 				return null;
 			}
 			
-			RecordList tmpList = db.get((int)indexOfFirstLetter);
+			ArrayList<Record> tmpList = db.get((int)indexOfFirstLetter);
 			
 			if(!tmpList.contains(newManager) && 
 					!currentRecordID.contains(newManager.getEmployeeID())
@@ -211,7 +211,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			if(indexOfFirstLetter == null) {
 				//return null;
 			}
-			RecordList tmpList = new RecordList();
+			ArrayList<Record> tmpList = new ArrayList<Record>();
 			tmpList = db.get((int)indexOfFirstLetter);
 			
 			if( tmpList != null && tmpList.size() > 0) {
@@ -365,7 +365,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			Manager tmpMan = (Manager)mrecord;
 			int indexList = getIndexFirstLetter(tmpMan.getLastName().toLowerCase());
-			RecordList tmpList = db.get(indexList);
+			ArrayList<Record>tmpList = db.get(indexList);
 			tmpList.remove(mrecord);
 			store.removeRecord(mrecord);
 			
@@ -416,7 +416,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			Employee tmpEmp = (Employee)record;
 			
 			int indexList = getIndexFirstLetter(tmpEmp.getLastName().toLowerCase());
-			RecordList tmpList = db.get(indexList);
+			ArrayList<Record> tmpList = db.get(indexList);
 			tmpList.remove(record);
 			store.removeRecord(record);
 			
@@ -463,7 +463,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	private Record FindRecordWithId(String recordID) {
 
 		Record foundRec  = null;
-		for(RecordList aList: db.values()) {
+		for(ArrayList<Record> aList: db.values()) {
 			
 			for(Record rec: aList) {
 				if(rec.getRecordID().equals(recordID)) {
