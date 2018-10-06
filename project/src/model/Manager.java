@@ -133,6 +133,20 @@ public class Manager extends Record {
 		return true;
 	}
 	
+	@Override
+	public int getRecordIndex() {
+		char firstLetter = lastName.charAt(0);
+		int index = 0;
+		for(char alpha = 'a'; alpha <= 'z'; alpha++) {
+			if(alpha == firstLetter) {
+				return index;
+			}
+			
+			index++;
+		}
+		return index;
+	}
+	
 	
 
 }

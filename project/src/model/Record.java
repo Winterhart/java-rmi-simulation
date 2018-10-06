@@ -44,6 +44,10 @@ public class Record {
 		return true;
 	}
 	
+	public int getRecordIndex() {
+		return 66;
+	}
+	
 
 	
 	

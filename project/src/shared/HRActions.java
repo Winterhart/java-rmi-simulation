@@ -29,7 +29,6 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String DEFAULT_LOG_FILE = "Log.txt";
-	//TODO: Does data needs to be singleton ??? 
 	private Map<Integer, ArrayList<Record>> db;
 	private List<Project> dbProject;
 	private List<String> currentRecordID;
@@ -52,9 +51,22 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	private void restoreFromStorage() {
 		
 		store.writeLog("Restoring Data from Storage...", DEFAULT_LOG_FILE);
+		List<Project> restoredProject = store.restoreProject();
+		for (Project project : restoredProject) {
+			dbProject.add(project);
+			currentProjectID.add(project.getProjectID());
+		}
 		
-		//TODO: Restore Project List from txt file
-		//TODO: Restore Record List from main recordList
+		List<Record> restoredRecord = store.restoreRecord();
+		for(Record record: restoredRecord) {
+			int index = record.getRecordIndex();
+			ArrayList<Record> indexedList = db.get(index);
+			if(indexedList.isEmpty()) {
+				indexedList = new ArrayList<Record>();
+			}
+			indexedList.add(record);
+			db.replace(index, indexedList);
+		}
 		
 	}
 
