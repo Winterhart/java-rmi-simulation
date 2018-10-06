@@ -18,7 +18,7 @@ public class Record {
 	
 	@Override
 	public String toString() {
-		return "Record:" + recordID;
+		return "Record:" + recordID + "|";
 	}
 	@Override
 	public int hashCode() {

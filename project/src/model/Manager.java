@@ -1,12 +1,48 @@
 package model;
 
 import java.util.List;
-public class Manager extends Employee {
+public class Manager extends Record {
 
 	private String managerID;
 	private Location location;
 	private List<Project> currentProjects;
+	private String firstName;
+	private String lastName;
+	private String mailID;
+	private String employeeID;
 	
+	public String getEmployeeID() {
+		return employeeID;
+	}
+
+	public void setEmployeeID(String employeeID) {
+		this.employeeID = employeeID;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getMailID() {
+		return mailID;
+	}
+
+	public void setMailID(String mailID) {
+		this.mailID = mailID;
+	}
+
 	public Location getLocation() {
 		return location;
 	}
@@ -29,8 +65,11 @@ public class Manager extends Employee {
 			String lastName, String mailID, 
 			List<Project> projects, Location location) {
 		
-		super(recordId, firstName, lastName, mailID, 
-				projects.get(0).getProjectID());
+		super(recordId);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.employeeID = recordId;
+		this.mailID = mailID;
 		this.setManagerID(managerId);
 		this.location = location;
 		this.currentProjects = projects;
@@ -46,7 +85,7 @@ public class Manager extends Employee {
 	
 	@Override
 	public String toString() {
-		return "Manager:" + getEmployeeID() + "|" + getFirstName() + 
+		return "Record:" + getEmployeeID() + "|" + getManagerID() + "|" + getFirstName() + 
 				"|" + getLastName() + "|" + getMailID() 
 				+ "|" + getAllProjectId() + "|" + location;
 	}
@@ -55,7 +94,7 @@ public class Manager extends Employee {
 		StringBuilder allProjects = new StringBuilder();
 		for(Project proj : currentProjects) {
 			allProjects.append(proj.getProjectID());
-			allProjects.append(", ");
+			allProjects.append(",");
 		}
 		return allProjects.toString();
 	}

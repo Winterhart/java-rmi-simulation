@@ -14,11 +14,14 @@ public class Client {
 	
 	//TODO: A log file is written on the client side for each user in
 	// the same folder
+	
+	//TODO: Build basic CLI
 	public static void main(String[] args) throws Exception {
 		Registry reg = LocateRegistry.getRegistry(5555); 
 		IHRActions sum = (IHRActions) reg.lookup("CA");
 		String projct= sum.createProject("P00001", "Marcel Foobar", "AnotherBlockChainSoftware");
 		String empID = sum.createERecord("Bob", "Bobinson", "ER20321", "bob.bobinson@bobbob.com", "P00001");
+		sum.editRecord("ER20321", "mailID", "paul.paul@paul.com");
 		System.out.println(projct);
 		System.out.println("Client is off... ");
 		

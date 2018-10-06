@@ -59,7 +59,7 @@ public class Employee extends Record {
 	
 	@Override
 	public String toString() {
-		return "Employee:" + employeeID + "|" + firstName + "|"
+		return "Record:" + employeeID + "|" + firstName + "|"
 				+ lastName + "|" + mailID + "|" + projectID; 
 	}
 

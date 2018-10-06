@@ -7,8 +7,14 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import model.Employee;
+import model.Location;
+import model.Manager;
 import model.Project;
 import model.Record;
 
@@ -56,8 +62,6 @@ public class Logger implements IStore {
 			FileWriter writer = new FileWriter(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME,   true);
 			BufferedWriter bWriter = new BufferedWriter(writer);
 			bWriter.append(record.toString());
-			bWriter.append("    who: " + LoggerName);
-			bWriter.append("   when: " + date.toString());
 			bWriter.newLine();
 			bWriter.close();
 			writer.close();
@@ -75,8 +79,6 @@ public class Logger implements IStore {
 			FileWriter writer = new FileWriter(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME,   true);
 			BufferedWriter bWriter = new BufferedWriter(writer);
 			bWriter.append(project.toString());
-			bWriter.append("    who: " + LoggerName);
-			bWriter.append("   when: " + date.toString());
 			bWriter.newLine();
 			bWriter.close();
 			writer.close();
@@ -237,5 +239,86 @@ public class Logger implements IStore {
 			return 0;
 		}
 	}
+
+	@Override
+	public List<Project> restoreProject() {
+		List<Project> returningProjects = new ArrayList<Project>();
+		String allProjects = readAllProject();
+		String[] splittedProjects = allProjects.split("Project:");
+		for(String proj: splittedProjects) {
+			String[] projAttrib = proj.split("\\|");
+			if(projAttrib != null && projAttrib.length >= 3) {
+				// Created project object from storage
+				Project projectCreated = new Project(
+						projAttrib[0], projAttrib[1],projAttrib[2]);
+				
+				returningProjects.add(projectCreated);
+						
+			}
+		}
+		
+		return returningProjects;
+	}
+
+	@Override
+	public List<Record> restoreRecord() {
+		
+		List<Record> returningRecord = new ArrayList<Record>();
+		String allRecord = readAllRecord();
+		String[] splittedRecords = allRecord.split("Record:");
+		for(String record: splittedRecords) {
+			String[] recordAttrib = record.split("\\|");
+			if(recordAttrib != null && recordAttrib.length > 0) {
+				
+				if(recordAttrib.length == 1 && !recordAttrib[0].isEmpty()) {
+					// It's a Record
+					Record rec = new Record(recordAttrib[0]);
+					returningRecord.add(rec);
+				}else if(recordAttrib.length == 5) {
+					//It's an employee
+					Employee emp = new Employee(recordAttrib[2], recordAttrib[0], recordAttrib[1],
+							recordAttrib[3], recordAttrib[4]);
+					returningRecord.add(emp);
+				}else if(recordAttrib.length == 7) {
+					// It's a Manager
+					List<Project> projects = restoreProject();
+					List<Project> managerProj = new ArrayList<Project>();
+					String[] projectIds = recordAttrib[5].split(",");
+					List<String> convertedProjects = Arrays.asList(projectIds);
+					for(Project prj: projects) {
+						
+						if(convertedProjects.contains(prj.getProjectID())) {
+							managerProj.add(prj);
+						}
+					}
+					// Find location
+					String loca = recordAttrib[6];
+					Location targetLocation = null;
+					for(Location loc: Location.values()) {
+						if(loca.equals(loc.toString())) {
+							targetLocation = loc;
+						}
+					}
+					Manager manager = new Manager(recordAttrib[0], recordAttrib[1], recordAttrib[2],
+							recordAttrib[3], recordAttrib[4], managerProj, targetLocation);
+					returningRecord.add(manager);
+				}else {
+					writeLog("Problem restoring record with  " + record.toString(), "Log.txt");
+				}
+				
+				
+			}
+			
+		}
+		
+		return returningRecord;
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }

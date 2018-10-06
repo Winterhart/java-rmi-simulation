@@ -19,9 +19,9 @@ import model.Project;
 import model.Record;
 import storage.IStore;
 
-//TODO: Send a log before doing an operation...
 //TODO: Implement all operation
 //TODO: Implement the UDP/IP method
+//TODO: Implement Restore Database
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	/**

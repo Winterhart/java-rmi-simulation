@@ -1,5 +1,7 @@
 package storage;
 
+import java.util.List;
+
 import model.Project;
 import model.Record;
 
@@ -20,6 +22,10 @@ public interface IStore {
 	public void removeRecord(Record mrecord);
 
 	public void removeProject(Project proj);
+	
+	public List<Project> restoreProject();
+	
+	public List<Record> restoreRecord();
 	
 	
 }
