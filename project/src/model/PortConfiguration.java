@@ -3,6 +3,7 @@ package model;
 import java.util.HashMap;
 
 public class PortConfiguration {
+		
 		private static HashMap<Location, Integer> serverConfig;
 		
 		private PortConfiguration() {}

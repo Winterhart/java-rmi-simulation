@@ -91,6 +91,13 @@ public class Logger implements IStore {
 
 	@Override
 	public String readAllProject() {
+		
+		File tmpFile = new File(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME);
+		if(!tmpFile.exists()) {
+			System.out.println("Storage Doesn't exist for " + storeName);
+			return null;
+		}
+		
 		try {
 			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_PROJECT_FILE_NAME);
 			BufferedReader bReader = new BufferedReader(reader);
@@ -112,6 +119,14 @@ public class Logger implements IStore {
 
 	@Override
 	public String readAllRecord() {
+		
+		
+		File tmpFile = new File(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME);
+		if(!tmpFile.exists()) {
+			System.out.println("Storage Doesn't exist for " + storeName);
+			return null;
+		}
+		
 		try {
 			FileReader reader = new FileReader(currentTargetFolder + "/" + DEFAULT_RECORD_FILE_NAME);
 			BufferedReader bReader = new BufferedReader(reader);

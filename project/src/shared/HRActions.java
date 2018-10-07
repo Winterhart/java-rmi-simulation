@@ -18,11 +18,12 @@ import java.util.regex.Pattern;
 import model.Employee;
 import model.Location;
 import model.Manager;
+import model.PortConfiguration;
 import model.Project;
 import model.Record;
 import storage.IStore;
 
-//TODO: Implement all operation
+//TODO: Implement all operations
 //TODO: Implement the UDP/IP method
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
@@ -31,6 +32,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String DEFAULT_LOG_FILE = "Log.txt";
+	private String SERVER_ADDRESS = "locahost";
 	private Map<Integer, ArrayList<Record>> db;
 	private List<Project> dbProject;
 	private List<String> currentRecordID;
@@ -62,7 +64,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		for(Record record: restoredRecord) {
 			int index = record.getRecordIndex();
 			ArrayList<Record> indexedList = db.get(index);
-			if(indexedList.isEmpty()) {
+			if(indexedList == null) {
 				indexedList = new ArrayList<Record>();
 			}
 			indexedList.add(record);
@@ -286,20 +288,58 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	@Override
 	public synchronized  String getRecordCount()  throws RemoteException {
-		// TODO Obtain Record Count from other server using UDP/IP
+		store.writeLog("Attempt to get number of records in server", DEFAULT_LOG_FILE);
+		try {
+			byte[] localData = getLocalNumberOfRecords();
+			HashMap<Location, Integer> serverConfiguration = PortConfiguration.getConfig();
+			for(Location loc: Location.values()) {
+				if(!loc.toString().equals(store.storeName)) {
+					int port = serverConfiguration.get(loc) + 1;
+					byte[] response  = getNumberOfRecordsWithServer(port);
+					
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
 
-	synchronized  byte[] getLocalNumberOfRecords() throws UnsupportedEncodingException {
+	public synchronized  byte[] getLocalNumberOfRecords() throws RemoteException {
 		int numberOfRecord = 0;
+		byte[] data = null;
 		for(ArrayList<Record> list: db.values()) {
 			if(list != null) {
 				numberOfRecord = numberOfRecord + list.size();
 			}
 		}
 		String dd = store.storeName + ": " +  Integer.toString(numberOfRecord);
-		return dd.getBytes("UTF-8");
+		try {
+			
+			data = dd.getBytes("UTF-8");
+		}catch(Exception ee) {
+			ee.printStackTrace();
+		}
+		return data;
+	}
+	
+	private byte[] getNumberOfRecordsWithServer(int port) {
+		byte[] data = null;
+		DatagramSocket socketData = null;
+		
+		
+		try {
+			socketData = new DatagramSocket();
+			InetAddress.getByName(SERVER_ADDRESS);
+			return data;
+			
+		}catch(Exception ee) {
+			store.writeLog(ee.getMessage(), DEFAULT_LOG_FILE);
+			ee.printStackTrace();
+			return data;
+		}
 	}
 	
 

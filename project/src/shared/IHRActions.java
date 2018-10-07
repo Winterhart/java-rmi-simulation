@@ -1,5 +1,6 @@
 package shared;
 
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramSocket;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -74,6 +75,8 @@ public interface IHRActions extends Remote {
 	public boolean editRecord(String recordID, String fieldName, Object value) throws RemoteException;
 	
 	public String createProject(String projectID, String clientName, String projectName) throws RemoteException;
+	
+	public  byte[] getLocalNumberOfRecords() throws RemoteException;
 	
 	
 

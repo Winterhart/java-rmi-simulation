@@ -31,3 +31,18 @@ Building Database...    who: US   when: Wed Oct 03 17:06:17 EDT 2018
 Restoring Data from Storage...    who: US   when: Wed Oct 03 17:06:17 EDT 2018
 Building Database...    who: US   when: Wed Oct 03 17:21:29 EDT 2018
 Restoring Data from Storage...    who: US   when: Wed Oct 03 17:21:29 EDT 2018
+Building Database...    who: US   when: Sun Oct 07 15:34:55 EDT 2018
+Restoring Data from Storage...    who: US   when: Sun Oct 07 15:34:55 EDT 2018
+Problem restoring record with      who: US   when: Sun Oct 07 15:34:55 EDT 2018
+Building Database...    who: US   when: Sun Oct 07 15:39:29 EDT 2018
+Restoring Data from Storage...    who: US   when: Sun Oct 07 15:39:29 EDT 2018
+Problem restoring record with      who: US   when: Sun Oct 07 15:39:29 EDT 2018
+Building Database...    who: US   when: Sun Oct 07 15:40:16 EDT 2018
+Restoring Data from Storage...    who: US   when: Sun Oct 07 15:40:16 EDT 2018
+Problem restoring record with      who: US   when: Sun Oct 07 15:40:16 EDT 2018
+Building Database...    who: US   when: Sun Oct 07 15:41:17 EDT 2018
+Restoring Data from Storage...    who: US   when: Sun Oct 07 15:41:17 EDT 2018
+Problem restoring record with      who: US   when: Sun Oct 07 15:41:17 EDT 2018
+Building Database...    who: US   when: Sun Oct 07 16:37:39 EDT 2018
+Restoring Data from Storage...    who: US   when: Sun Oct 07 16:37:39 EDT 2018
+Problem restoring record with      who: US   when: Sun Oct 07 16:37:39 EDT 2018
