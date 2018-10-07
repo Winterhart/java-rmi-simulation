@@ -6,6 +6,8 @@ import model.Project;
 import model.Record;
 
 public interface IStore {
+	
+	String storeName = null;
 
 	public void writeLog(String message, String fileName);
 	

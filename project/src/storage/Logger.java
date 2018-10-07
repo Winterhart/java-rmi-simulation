@@ -22,12 +22,12 @@ import java.io.IOException;
 
 public class Logger implements IStore {
 	
-	private String LoggerName;
+	String storeName;
 	private String currentTargetFolder;
 	private String DEFAULT_RECORD_FILE_NAME = "Records.txt";
 	private String DEFAULT_PROJECT_FILE_NAME = "Projects.txt";
 	public Logger(String name, String mainFolder) {
-		this.LoggerName = name;
+		this.storeName = name;
 		this.currentTargetFolder = mainFolder;
 	}
 
@@ -39,7 +39,7 @@ public class Logger implements IStore {
 			FileWriter writer = new FileWriter(currentTargetFolder +  fileName, true);
 			BufferedWriter bWriter = new BufferedWriter(writer);
 			bWriter.append(message);
-			bWriter.append("    who: " + LoggerName);
+			bWriter.append("    who: " + storeName);
 			bWriter.append("   when: " + date.toString());
 			bWriter.newLine();
 			bWriter.close();
@@ -52,7 +52,7 @@ public class Logger implements IStore {
 
 	@Override
 	public String getStorageName() {
-		return this.LoggerName;
+		return this.storeName;
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 package shared;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -288,6 +291,19 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		// TODO Obtain Record Count from other server using UDP/IP
 		return null;
 	}
+	
+
+	synchronized  byte[] getLocalNumberOfRecords() throws UnsupportedEncodingException {
+		int numberOfRecord = 0;
+		for(ArrayList<Record> list: db.values()) {
+			if(list != null) {
+				numberOfRecord = numberOfRecord + list.size();
+			}
+		}
+		String dd = store.storeName + ": " +  Integer.toString(numberOfRecord);
+		return dd.getBytes("UTF-8");
+	}
+	
 
 	@Override
 	public synchronized  boolean editRecord(String recordID, String fieldName,

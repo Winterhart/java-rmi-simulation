@@ -1,12 +1,16 @@
 package shared;
 
+import java.net.DatagramSocket;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.*;
 import model.*;
+import storage.IStore;
 
 public interface IHRActions extends Remote {
 	
+	IStore store = null;
+
 
 	/**
 	 * 
