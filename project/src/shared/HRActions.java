@@ -24,7 +24,6 @@ import storage.IStore;
 
 //TODO: Implement all operation
 //TODO: Implement the UDP/IP method
-//TODO: Implement Restore Database
 public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	/**
@@ -46,7 +45,6 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		currentRecordID = new ArrayList<String>();
 		currentProjectID = new ArrayList<String>();
 		currentManagerID = new ArrayList<String>();
-		
 		buildfakeDatabase();
 		restoreFromStorage();
 	}

@@ -6,13 +6,13 @@ public class ServerUDP implements IServerUDP {
 	
 	private IHRActions localInstance;
 	private IStore serverStore;
-	public ServerUDP(IHRActions serverInstance) {
+	public ServerUDP(IHRActions serverInstance, int portUDP) {
 		this.localInstance = serverInstance;
 		this.serverStore = localInstance.store;
 	}
 	@Override
 	public String startUDPServer() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub 
 		return null;
 	}
 	

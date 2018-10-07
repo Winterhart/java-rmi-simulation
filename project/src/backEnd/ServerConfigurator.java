@@ -2,9 +2,13 @@ package backEnd;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.HashMap;
 
 import model.Location;
+import model.PortConfiguration;
 import shared.HRActions;
+import shared.IServerUDP;
+import shared.ServerUDP;
 import storage.IStore;
 import storage.Logger;
 
@@ -25,16 +29,15 @@ public class ServerConfigurator {
 	
 	 void configureCenter() {
 		for(Location loc: Location.values()) {
-			String locat = loc.toString();
 			switch(loc){
 			case CA:
-				buildCenter(locat, 5555);
+				buildCenter(loc, 5555);
 				break;
 			case US:
-				buildCenter(locat, 7777);
+				buildCenter(loc, 7777);
 				break;
 			case UK:
-				buildCenter(locat, 4444);
+				buildCenter(loc, 4444);
 				break;
 			}
 	
@@ -42,14 +45,20 @@ public class ServerConfigurator {
 		
 	}
 	
-	private void buildCenter(String loca, int port) {
+	private void buildCenter(Location loca, int port) {
 		
 		// Create and pass a storing engine to the HRAction
-		IStore storingEngine = new Logger(loca, MAIN_TREE_FOLDER + loca + "/");
+		IStore storingEngine = new Logger(loca.toString(), MAIN_TREE_FOLDER + loca.toString() + "/");
 		try {
-			HRActions instanceHRAction = new HRActions(storingEngine);		
+			HRActions instanceHRAction = new HRActions(storingEngine);
+			IServerUDP serverUDP = new ServerUDP(instanceHRAction, port+1);
+			// Update configuration of the server
+			HashMap<Location, Integer> serverConf = PortConfiguration.getConfig();
+			serverConf.put(loca, port);
+			PortConfiguration.updateConfig(serverConf);
+			
 			Registry reg = LocateRegistry.createRegistry(port);
-			reg.bind(loca, instanceHRAction);
+			reg.bind(loca.toString(), instanceHRAction);
 		}catch(Exception ee) {
 			ee.printStackTrace();
 		}
