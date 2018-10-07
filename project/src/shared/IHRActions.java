@@ -34,7 +34,7 @@ public interface IHRActions extends Remote {
 			String lastName, 
 			String employeeID, 
 			String mailID, 
-			List<Project> projects, Location location) throws RemoteException;
+			String projects, String location) throws RemoteException;
 	
 	
 	/**

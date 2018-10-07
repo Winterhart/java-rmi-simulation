@@ -33,7 +33,11 @@ public class ServerUDP extends Thread implements IServerUDP  {
 			DatagramPacket pack = new DatagramPacket(buffer, buffer.length);
 	        while (listen) {
 	        	sock.receive(pack);
-	        	//buffer = localInstance.getLocalNumberOfRecords();
+	        	String secretPass = pack.toString();
+	        	if(secretPass.equals("coucou")) {
+		        	buffer = localInstance.getLocalNumberOfRecords();
+	        	}
+
 	        	DatagramPacket reply = new DatagramPacket(pack.getData(), pack.getLength(),
 	        			pack.getAddress(), pack.getPort());
 	        	

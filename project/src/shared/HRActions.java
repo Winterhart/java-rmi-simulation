@@ -2,6 +2,7 @@ package shared;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
@@ -69,6 +70,8 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			}
 			indexedList.add(record);
 			db.replace(index, indexedList);
+			
+			currentRecordID.add(record.getRecordID());
 		}
 		
 	}
@@ -93,7 +96,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	@Override
 	public synchronized String createMRecord(String firstName, String lastName, 
 			String employeeID, String mailID,
-			List<Project> projects, Location location) throws RemoteException {
+			String projects, String location) throws RemoteException {
 		
 		
 		
@@ -104,30 +107,38 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			String employeeIDUpper = employeeID.toUpperCase();
 			if(employeeIDUpper.length() != 7 ||
 					!employeeIDUpper.startsWith("MR")) {
-				return null;
+				return "Wrong Employee ID";
 			}
 			// If employee already exists... ?
 			if(currentRecordID.contains(employeeIDUpper)) {
-				return null;
+				return "Manager Already Exists";
 			}
 			
 			
 			// Validate Mail
-			if(emailIsNotValid(mailID)) {
-				return null;
+			if(!emailIsNotValid(mailID)) {
+				return "Email not valid";
 			}
 			
+			String[] projectsPass = projects.split(",");
+			List<String> projectIn = Arrays.asList(projectsPass);
+			List<Project> projectToPassIn = new ArrayList<Project>();
 			//Validate Project ID: Must already exists
-			for(Project proj: projects) {
-				if(!currentProjectID.contains(proj.getProjectID())) {
-					return null;
+			for(Project proj: dbProject) {
+				if(projectIn.contains(proj.toString())) {
+					projectToPassIn.add(proj);
 				}
 			}
-
 			
+			Location locationE = null;
+			for(Location loc: Location.values()) {
+				if(loc.toString().equals(location)) {
+					locationE = loc;
+				}
+			}
 			
-			newManager = new Manager(employeeIDUpper, generateUniqueManagerId(location),
-					firstName, lastName, mailID, projects, location);
+			newManager = new Manager(employeeIDUpper, generateUniqueManagerId(locationE),
+					firstName, lastName, mailID, projectToPassIn, locationE);
 			
 			//Obtain first Letter of LastName for DB
 			String lowerLastName = lastName.toLowerCase();
@@ -135,7 +146,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			Integer indexOfFirstLetter = getIndexFirstLetter(lowerLastName);
 			if(indexOfFirstLetter == null) {
-				return null;
+				return "Lastname not in correct format";
 			}
 			
 			ArrayList<Record> tmpList = db.get((int)indexOfFirstLetter);
@@ -153,16 +164,17 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			// Add to the storage
 			store.addRecord(newManager);
 		
-			return newManager.getEmployeeID();
+			return "Manager created: " + newManager.getEmployeeID();
 			
 		}catch(Exception ee) {
 			
 			ee.printStackTrace();
 			store.writeLog(ee.getLocalizedMessage(), DEFAULT_LOG_FILE);
+			return "Error: " + ee.getMessage();
 		}
 
 		
-		return null;
+
 	}
 
 	private String generateUniqueManagerId(Location location) {
@@ -193,25 +205,25 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			String employeeIDUpper = employeeID.toUpperCase();
 			if(employeeIDUpper.length() != 7 || !employeeIDUpper.startsWith("ER")) {
 				store.writeLog("Employee ID not valid", DEFAULT_LOG_FILE);
-				return null;
+				return "Wrong EmployeeID format";
 			}
 			// If employee already exists... ?
 			if(currentRecordID.contains(employeeIDUpper)) {
 				store.writeLog("Employee Already exists", DEFAULT_LOG_FILE);
-				return null;
+				return "Employee already exists";
 			}
 			
 			
 			// Validate Mail
 			if(!emailIsNotValid(mailID)) {
 				store.writeLog("Email not in valid format", DEFAULT_LOG_FILE);
-				return null;
+				return "Wrong Email format";
 			}
 			
 			//Validate Project ID: Must already exists
 			if(!currentProjectID.contains(projectID)) {
 				store.writeLog("Project doesn't exists", DEFAULT_LOG_FILE);
-				return null;
+				return "Referenced Project doesn't exists";
 			}
 			
 			
@@ -224,25 +236,14 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			Integer indexOfFirstLetter = getIndexFirstLetter(lowerLastName);
 			if(indexOfFirstLetter == null) {
-				return null;
+				return "Wrong format lastname";
 			}
 			ArrayList<Record> tmpList = new ArrayList<Record>();
 			
 			if(db.get((int)indexOfFirstLetter) != null) {
 				tmpList = db.get((int)indexOfFirstLetter);
 			}
-			
-			if( tmpList != null && tmpList.size() > 0) {
-				if(tmpList.contains(newEmployee)) {
-					tmpList.remove(newEmployee);
-				}
-			}
-			
-			if(currentRecordID != null && currentRecordID.size() > 0) {
-				if(currentRecordID.contains(newEmployee.getEmployeeID())) {
-					currentRecordID.remove(newEmployee.getEmployeeID());
-				}
-			}
+		
 			
 			tmpList.add(newEmployee);
 			currentRecordID.add(newEmployee.getEmployeeID());
@@ -251,13 +252,13 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			db.replace((int)indexOfFirstLetter, tmpList);
 			// Add to the storage
 			store.addRecord(newEmployee);
-			return newEmployee.getEmployeeID();
+			return "New Employee created: " + newEmployee.getEmployeeID();
 			
 		}catch(Exception ee) {
 			ee.printStackTrace();
 			String problem = ee.getMessage();
 			store.writeLog("Exception in Create Employee" + problem, DEFAULT_LOG_FILE);
-			return null;
+			return "Error: " + ee.getMessage();
 		}
 		
 		//return newEmployee;
@@ -326,20 +327,30 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 	
 	private byte[] getNumberOfRecordsWithServer(int port) {
-		byte[] data = null;
+		byte[] dataReceived = new byte[1024];
+		byte[] coucou = "coucou".getBytes();
 		DatagramSocket socketData = null;
 		
 		
 		try {
 			socketData = new DatagramSocket();
 			InetAddress.getByName(SERVER_ADDRESS);
-			return data;
-			
+			DatagramPacket pack = new DatagramPacket(coucou, dataReceived.length, port);
+			socketData.send(pack);
+			DatagramPacket response = new DatagramPacket(dataReceived, dataReceived.length);
+			socketData.receive(response);
+
 		}catch(Exception ee) {
 			store.writeLog(ee.getMessage(), DEFAULT_LOG_FILE);
 			ee.printStackTrace();
-			return data;
 		}
+		finally {
+			if(socketData != null) {
+				socketData.close();
+			}
+
+		}
+		return dataReceived;
 	}
 	
 
@@ -553,25 +564,25 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		char firstChar = projectID.toLowerCase().charAt(0);
 		if(projectID.length() != 6 || firstChar != 'p') {
 			store.writeLog("Wrong project ID format ", DEFAULT_LOG_FILE);
-			return null;
+			return "Error wrong project format";
 		}
 		try {
 			Project newProj = new Project(projectID, clientName, projectName);
 			if(dbProject.contains(newProj)) {
 				store.writeLog("Project Already Exists", DEFAULT_LOG_FILE);
-				return null;
+				return "Project Already Exists";
 			}
 			
 			dbProject.add(newProj);
 			currentProjectID.add(projectID);
 			store.addProject(newProj);
 			
-			return store.readAllProject();
+			return "Project Added";
 			
 		}catch(Exception ee) {
 			store.writeLog("Problem while creating a project", DEFAULT_LOG_FILE);
 			ee.printStackTrace();
-			return null;
+			return ee.getMessage();
 		}
 		
 

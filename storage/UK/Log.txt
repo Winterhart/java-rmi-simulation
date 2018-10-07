@@ -48,3 +48,69 @@ Problem restoring record with      who: UK   when: Sun Oct 07 15:41:17 EDT 2018
 Building Database...    who: UK   when: Sun Oct 07 16:37:39 EDT 2018
 Restoring Data from Storage...    who: UK   when: Sun Oct 07 16:37:39 EDT 2018
 Problem restoring record with      who: UK   when: Sun Oct 07 16:37:39 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 18:27:30 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 18:27:30 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 18:27:30 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 18:36:42 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 18:36:42 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 18:36:42 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 18:44:06 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 18:44:06 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 18:44:06 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 18:48:16 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 18:48:16 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 18:48:16 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 18:56:50 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 18:56:50 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 18:56:50 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:11:00 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:11:00 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:11:00 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:11:19 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:11:19 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:11:19 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:12:35 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:12:35 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:12:35 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:13:10 EDT 2018
+Attempt to write a new Employee    who: UK   when: Sun Oct 07 19:13:16 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:15:49 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:15:49 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:15:49 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:15:56 EDT 2018
+Project Already Exists    who: UK   when: Sun Oct 07 19:15:56 EDT 2018
+Attempt to write a new Employee    who: UK   when: Sun Oct 07 19:15:56 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:17:03 EDT 2018
+Project Already Exists    who: UK   when: Sun Oct 07 19:17:03 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:19:09 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:19:09 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:19:09 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:19:20 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:19:20 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:19:20 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:19:23 EDT 2018
+Project Already Exists    who: UK   when: Sun Oct 07 19:19:23 EDT 2018
+Attempt to write a new Employee    who: UK   when: Sun Oct 07 19:19:23 EDT 2018
+Employee Already exists    who: UK   when: Sun Oct 07 19:19:23 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:20:06 EDT 2018
+Project Already Exists    who: UK   when: Sun Oct 07 19:20:06 EDT 2018
+Attempt to write a new Employee    who: UK   when: Sun Oct 07 19:20:06 EDT 2018
+Employee Already exists    who: UK   when: Sun Oct 07 19:20:06 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:24:40 EDT 2018
+Project Already Exists    who: UK   when: Sun Oct 07 19:24:40 EDT 2018
+Attempt to write a new Employee    who: UK   when: Sun Oct 07 19:24:58 EDT 2018
+Employee Already exists    who: UK   when: Sun Oct 07 19:24:58 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:30:35 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:30:35 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:30:35 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:31:05 EDT 2018
+Project Already Exists    who: UK   when: Sun Oct 07 19:31:05 EDT 2018
+Attempt to write a new Employee    who: UK   when: Sun Oct 07 19:31:06 EDT 2018
+Employee Already exists    who: UK   when: Sun Oct 07 19:31:06 EDT 2018
+Building Database...    who: UK   when: Sun Oct 07 19:31:26 EDT 2018
+Restoring Data from Storage...    who: UK   when: Sun Oct 07 19:31:26 EDT 2018
+Problem restoring record with      who: UK   when: Sun Oct 07 19:31:26 EDT 2018
+Attempt to write a new Project    who: UK   when: Sun Oct 07 19:31:32 EDT 2018
+Project Already Exists    who: UK   when: Sun Oct 07 19:31:32 EDT 2018
+Attempt to write a new Employee    who: UK   when: Sun Oct 07 19:31:32 EDT 2018
+Employee Already exists    who: UK   when: Sun Oct 07 19:31:32 EDT 2018
