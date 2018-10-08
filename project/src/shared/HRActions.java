@@ -363,7 +363,12 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		}
 		return data;
 	}
-	
+	/**
+	 * This code is inspired by this tutorial:
+	 * https://www.baeldung.com/udp-in-java
+	 * @param port
+	 * @return
+	 */
 	private String getNumberOfRecordsWithServer(int port) {
 		String returningString = "";
 		store.writeLog("Attempt to get Record on port " + port, DEFAULT_LOG_FILE);

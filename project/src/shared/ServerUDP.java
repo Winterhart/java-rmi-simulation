@@ -5,7 +5,11 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import storage.IStore;
-
+/**
+ * This code is inspired by this tutorial: https://www.baeldung.com/udp-in-java
+ * @author winterhart
+ *
+ */
 public class ServerUDP implements Runnable  {
 	
 	private IHRActions localInstance;
