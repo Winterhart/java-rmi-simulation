@@ -1,10 +1,13 @@
 package shared;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -33,7 +36,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String DEFAULT_LOG_FILE = "Log.txt";
-	private String SERVER_ADDRESS = "locahost";
+	private String SERVER_ADDRESS = "localhost";
 	private Map<Integer, ArrayList<Record>> db;
 	private List<Project> dbProject;
 	private List<String> currentRecordID;
@@ -62,16 +65,24 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		}
 		
 		List<Record> restoredRecord = store.restoreRecord();
+		store.writeLog("We have " + restoredRecord.size() + " records to restore", DEFAULT_LOG_FILE);
 		for(Record record: restoredRecord) {
-			int index = record.getRecordIndex();
-			ArrayList<Record> indexedList = db.get(index);
-			if(indexedList == null) {
-				indexedList = new ArrayList<Record>();
-			}
-			indexedList.add(record);
-			db.replace(index, indexedList);
-			
 			currentRecordID.add(record.getRecordID());
+		}
+		
+		for(Record record: restoredRecord) {
+			store.writeLog("RecordIndex" + record.getRecordIndex(), DEFAULT_LOG_FILE);
+			Integer indexToInsertRecord = (Integer)record.getRecordIndex();
+			ArrayList<Record> newListIn = new ArrayList<Record>();
+			
+			if(db.get(indexToInsertRecord) == null) {
+				newListIn.add(record);
+				db.replace(indexToInsertRecord, newListIn);
+			}else {
+				newListIn = db.get(indexToInsertRecord);
+				newListIn.add(record);
+				db.replace(indexToInsertRecord, newListIn);
+			}
 		}
 		
 	}
@@ -88,7 +99,6 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	    {
 			ArrayList<Record> list = new ArrayList<Record>();
 			db.put(i, list);
-			i++;
 	    }
 		
 	}
@@ -125,7 +135,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			List<Project> projectToPassIn = new ArrayList<Project>();
 			//Validate Project ID: Must already exists
 			for(Project proj: dbProject) {
-				if(projectIn.contains(proj.toString())) {
+				if(projectIn.contains(proj.getProjectID())) {
 					projectToPassIn.add(proj);
 				}
 			}
@@ -149,7 +159,14 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 				return "Lastname not in correct format";
 			}
 			
-			ArrayList<Record> tmpList = db.get((int)indexOfFirstLetter);
+			// Prevent NULL Pointer
+			ArrayList<Record> tmpList;
+			if(db.get((int)indexOfFirstLetter) == null) {
+				tmpList = new ArrayList<Record>();
+			}else {
+				tmpList = db.get((int)indexOfFirstLetter);
+			}
+			
 			
 			if(!tmpList.contains(newManager) && 
 					!currentRecordID.contains(newManager.getEmployeeID())
@@ -208,7 +225,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 				return "Wrong EmployeeID format";
 			}
 			// If employee already exists... ?
-			if(currentRecordID.contains(employeeIDUpper)) {
+			if(currentRecordID.contains(employeeID)) {
 				store.writeLog("Employee Already exists", DEFAULT_LOG_FILE);
 				return "Employee already exists";
 			}
@@ -228,7 +245,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			
 			
-			newEmployee = new Employee(firstName.trim(), lastName.trim(), employeeIDUpper, mailID,
+			newEmployee = new Employee(firstName.trim(), lastName.trim(), employeeID, mailID,
 					projectID);
 			//Obtain first Letter of LastName for DB
 			String lowerLastName = lastName.toLowerCase();
@@ -289,26 +306,44 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	@Override
 	public synchronized  String getRecordCount()  throws RemoteException {
+		StringBuffer outString = new StringBuffer();
 		store.writeLog("Attempt to get number of records in server", DEFAULT_LOG_FILE);
-		try {
-			byte[] localData = getLocalNumberOfRecords();
+
 			HashMap<Location, Integer> serverConfiguration = PortConfiguration.getConfig();
 			for(Location loc: Location.values()) {
-				if(!loc.toString().equals(store.storeName)) {
-					int port = serverConfiguration.get(loc) + 1;
-					byte[] response  = getNumberOfRecordsWithServer(port);
+				String locName = loc.toString();
+				String storageName = store.getStorageName();
+				if(!locName.equals(storageName)) {
+						int port = serverConfiguration.get(loc) + 1;
+						String resp  = getNumberOfRecordsWithServer(port);
+						store.writeLog("Append with " + resp, DEFAULT_LOG_FILE);
+						outString.append(resp);
+						outString.append(" ");
 					
+				}else {
+					byte[] localData = getLocalNumberOfRecords();
+					
+					String localString = null;
+					try {
+						localString = new String(localData, StandardCharsets.UTF_8);
+					}catch(Exception ee) {
+						store.writeLog("!!!!!! ", DEFAULT_LOG_FILE);
+					}
+
+					outString.append(localString);
+					outString.append(" ");
+					store.writeLog("Append with " + localString, DEFAULT_LOG_FILE);
 				}
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+			
+			return outString.toString();
 	}
+				
+
 	
 
 	public synchronized  byte[] getLocalNumberOfRecords() throws RemoteException {
+		store.writeLog("Attempt to get the local number of record", DEFAULT_LOG_FILE);
 		int numberOfRecord = 0;
 		byte[] data = null;
 		for(ArrayList<Record> list: db.values()) {
@@ -316,32 +351,39 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 				numberOfRecord = numberOfRecord + list.size();
 			}
 		}
-		String dd = store.storeName + ": " +  Integer.toString(numberOfRecord);
+
+		String dd = store.getStorageName() + ": " +  Integer.toString(numberOfRecord);
+		store.writeLog("Local Number of Record " + dd, DEFAULT_LOG_FILE);
 		try {
 			
 			data = dd.getBytes("UTF-8");
 		}catch(Exception ee) {
 			ee.printStackTrace();
+			store.writeLog("Attempt to get the local, ERROR " + ee.getMessage(), DEFAULT_LOG_FILE);
 		}
 		return data;
 	}
 	
-	private byte[] getNumberOfRecordsWithServer(int port) {
-		byte[] dataReceived = new byte[1024];
-		byte[] coucou = "coucou".getBytes();
-		DatagramSocket socketData = null;
-		
-		
+	private String getNumberOfRecordsWithServer(int port) {
+		String returningString = "";
+		store.writeLog("Attempt to get Record on port " + port, DEFAULT_LOG_FILE);
+		byte[] buffer = new byte[200];
+		DatagramSocket socketData = null;		
+		byte[] dataReceived = new byte[200];
 		try {
+			InetAddress aHost = InetAddress.getByName("localhost");
 			socketData = new DatagramSocket();
-			InetAddress.getByName(SERVER_ADDRESS);
-			DatagramPacket pack = new DatagramPacket(coucou, dataReceived.length, port);
-			socketData.send(pack);
-			DatagramPacket response = new DatagramPacket(dataReceived, dataReceived.length);
-			socketData.receive(response);
+			DatagramPacket r = new DatagramPacket(buffer, buffer.length, aHost, port);
+			socketData.send(r);
+
+			r  = new DatagramPacket(buffer, buffer.length);
+			socketData.setSoTimeout(3000);
+			socketData.receive(r);
+			String dataRe = new String(r.getData(), StandardCharsets.UTF_8);
+			store.writeLog("Attempt to get Record on port  dataRe " + dataRe, DEFAULT_LOG_FILE);
+			returningString = dataRe.trim();
 
 		}catch(Exception ee) {
-			store.writeLog(ee.getMessage(), DEFAULT_LOG_FILE);
 			ee.printStackTrace();
 		}
 		finally {
@@ -350,7 +392,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			}
 
 		}
-		return dataReceived;
+		return returningString;
 	}
 	
 
@@ -545,12 +587,16 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	private Record FindRecordWithId(String recordID) {
 
 		Record foundRec  = null;
-		for(ArrayList<Record> aList: db.values()) {
-			
-			for(Record rec: aList) {
-				if(rec.getRecordID().equals(recordID)) {
-					foundRec = rec;
-					return rec;
+		store.writeLog("Collection of " + 		db.values().size() + 
+				"sear with : " + recordID, DEFAULT_LOG_FILE);
+		for(Integer i: db.keySet()) {
+			ArrayList<Record> records = db.get(i);
+			store.writeLog("Collection of " + records.size() + 
+					" records with key : " + i, DEFAULT_LOG_FILE);
+			for(Record r: records) {
+				if(recordID.equalsIgnoreCase(r.getRecordID())) {
+					store.writeLog("Found a record", DEFAULT_LOG_FILE);
+					return r;
 				}
 			}
 		}

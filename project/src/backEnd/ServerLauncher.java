@@ -6,7 +6,4 @@ public class ServerLauncher {
 			ServerConfigurator config = new ServerConfigurator();
 			config.configureCenter();
 	}
-	
-
-
 }

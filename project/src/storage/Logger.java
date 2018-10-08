@@ -22,12 +22,20 @@ import java.io.IOException;
 
 public class Logger implements IStore {
 	
-	String storeName;
+	public String storeName;
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
 	private String currentTargetFolder;
 	private String DEFAULT_RECORD_FILE_NAME = "Records.txt";
 	private String DEFAULT_PROJECT_FILE_NAME = "Projects.txt";
 	public Logger(String name, String mainFolder) {
-		this.storeName = name;
+		this.setStoreName(name);
 		this.currentTargetFolder = mainFolder;
 	}
 
@@ -52,7 +60,7 @@ public class Logger implements IStore {
 
 	@Override
 	public String getStorageName() {
-		return this.storeName;
+		return getStoreName();
 	}
 
 	@Override

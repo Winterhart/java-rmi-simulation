@@ -4,7 +4,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.Employee;
 import model.Location;
 import model.Project;
@@ -50,9 +49,19 @@ public class Client {
 			
 			response =regUK.createProject("P00003", "Duke Foobar", "AnotherBlockChainSoftware");
 			System.out.println(response);
+			response = regUK.createProject("P69691", "NewClient", "StangProject");
+			System.out.println(response);
 			response = regUK.createERecord("Duke", "Dukinson", "ER20321", "DukeDuke@bobbob.com", "P00003");
 			System.out.println(response);
+			response = regUK.createMRecord("Bobo", "Bonobo", "MR23231", "Bofoaw@fmef.com", "P00003,P69691", "UK");
+			System.out.println(response);
 			
+			boolean success = regUK.editRecord("MR23231", "mailID", "sueprNEwEmaiL@dme.com");
+			System.out.println("Record Update: " + success);
+			
+			
+			response = regUK.getRecordCount();
+			System.out.println(response);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

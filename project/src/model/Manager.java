@@ -71,6 +71,7 @@ public class Manager extends Record {
 		this.employeeID = recordId;
 		this.mailID = mailID;
 		this.setManagerID(managerId);
+		this.setRecordID(recordId);
 		this.location = location;
 		this.currentProjects = projects;
 	}
@@ -135,18 +136,22 @@ public class Manager extends Record {
 	
 	@Override
 	public int getRecordIndex() {
-		char firstLetter = lastName.charAt(0);
+		String lastNa = this.getLastName().toLowerCase();
+		char firstLetter = lastNa.charAt(0);
 		int index = 0;
 		for(char alpha = 'a'; alpha <= 'z'; alpha++) {
 			if(alpha == firstLetter) {
 				return index;
 			}
-			
 			index++;
 		}
 		return index;
 	}
 	
+	@Override
+	public String getRecordID() {
+		return this.getEmployeeID();
+	}
 	
 
 }

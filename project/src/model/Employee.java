@@ -55,6 +55,7 @@ public class Employee extends Record {
 		this.lastName = lastName;
 		this.mailID = mailID;
 		this.projectID = projectID;
+		this.setRecordID(employeeId);
 	}
 	
 	@Override
@@ -114,7 +115,8 @@ public class Employee extends Record {
 	
 	@Override
 	public int getRecordIndex() {
-		char firstLetter = lastName.charAt(0);
+		String lastNa = this.getLastName().toLowerCase();
+		char firstLetter = lastNa.charAt(0);
 		int index = 0;
 		for(char alpha = 'a'; alpha <= 'z'; alpha++) {
 			if(alpha == firstLetter) {
@@ -124,6 +126,11 @@ public class Employee extends Record {
 			index++;
 		}
 		return index;
+	}
+	
+	@Override
+	public String getRecordID() {
+		return this.getEmployeeID();
 	}
 	
 

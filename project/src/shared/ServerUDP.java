@@ -6,7 +6,7 @@ import java.net.InetAddress;
 
 import storage.IStore;
 
-public class ServerUDP extends Thread implements IServerUDP  {
+public class ServerUDP implements Runnable  {
 	
 	private IHRActions localInstance;
 	private IStore serverStore;
@@ -20,26 +20,26 @@ public class ServerUDP extends Thread implements IServerUDP  {
 		this.serverStore = localInstance.store;
 		this.setAssignedPort(portUDP);
 	}
-	@Override
-	public String startUDPServer() {
-		Run();
-		return "UDP Server started...";
+	public int getAssignedPort() {
+		return assignedPort;
 	}
-	
-	public void Run() {
+	public void setAssignedPort(int assignedPort) {
+		this.assignedPort = assignedPort;
+	}
+	@Override
+	public void run() {
+		DatagramSocket sock = null;
 		try {
-			byte[] buffer = new byte[1024];
-			DatagramSocket sock = new DatagramSocket(assignedPort);
-			DatagramPacket pack = new DatagramPacket(buffer, buffer.length);
+			byte[] buffer = new byte[256];
+			sock = new DatagramSocket(assignedPort);
 	        while (listen) {
-	        	sock.receive(pack);
-	        	String secretPass = pack.toString();
-	        	if(secretPass.equals("coucou")) {
-		        	buffer = localInstance.getLocalNumberOfRecords();
-	        	}
-
-	        	DatagramPacket reply = new DatagramPacket(pack.getData(), pack.getLength(),
-	        			pack.getAddress(), pack.getPort());
+	        	//buffer = localInstance.getLocalNumberOfRecords();
+	        	DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+	        	sock.receive(packet);
+	        	InetAddress add = packet.getAddress();
+	        	buffer = localInstance.getLocalNumberOfRecords();
+	        	DatagramPacket reply = new DatagramPacket(buffer, buffer.length,
+	        			add, packet.getPort());
 	        	
 	        	sock.send(reply);
 	        	
@@ -49,12 +49,7 @@ public class ServerUDP extends Thread implements IServerUDP  {
 			ee.printStackTrace();
 			serverStore.writeLog("Problem with UDP Server: " + ee.getMessage(), "Log.txt");
 		}
-	}
-	public int getAssignedPort() {
-		return assignedPort;
-	}
-	public void setAssignedPort(int assignedPort) {
-		this.assignedPort = assignedPort;
+		
 	}
 	
 	
