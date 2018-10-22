@@ -69,6 +69,8 @@ public interface IHRActions extends DEMSOperations {
 	  * Shut down the entire system...
 	  */
 	 public void shutdown ();
+	 
+	 public  byte[] getLocalNumberOfRecords(); 
 	
 	
 
