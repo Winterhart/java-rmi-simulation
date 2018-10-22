@@ -1,0 +1,27 @@
+module HrCenterApp{
+  interface DEMS {
+    struct Project {
+     wstring projectID;
+     wstring clientName;
+     wstring projectName;
+     };
+    enum ServerLocation {CA, US, UK};
+    wstring createMRecord(in wstring firstName, in wstring lastName,
+     in wstring employeeID, in wstring mailID, in wstring managerID,
+     in Project project);
+
+     wstring createERecord(in wstring firstName, in wstring lastName,
+     in wstring employeeID, in wstring mailID, in wstring projectID,
+     in ServerLocation location, in wstring managerID);
+
+     wstring getRecordCounts(in wstring managerID);
+
+     wstring editRecord(in wstring recordID, in wstring fieldName,
+     in wstring newValue);
+
+     wstring transferRecord(in wstring managerID, in wstring recordID,
+     in ServerLocation location);
+
+     oneway void shutdown();
+ };
+};
