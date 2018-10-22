@@ -2,14 +2,11 @@ package shared;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,6 +16,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import HrCenterApp.DEMSPackage.ServerLocation;
 import model.Employee;
 import model.Location;
 import model.Manager;
@@ -27,23 +25,16 @@ import model.Project;
 import model.Record;
 import storage.IStore;
 
-//TODO: Implement all operations
-//TODO: Implement the UDP/IP method
-public class HRActions extends UnicastRemoteObject implements IHRActions {
+public class HRActions implements IHRActions {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private String DEFAULT_LOG_FILE = "Log.txt";
-	private String SERVER_ADDRESS = "localhost";
 	private Map<Integer, ArrayList<Record>> db;
 	private List<Project> dbProject;
 	private List<String> currentRecordID;
 	private List<String> currentProjectID;
 	private List<String> currentManagerID;
 	IStore store;
-	public HRActions(IStore storingEngine) throws RemoteException {
+	public HRActions(IStore storingEngine) {
 		super();
 		this.store = storingEngine;
 		db = new HashMap<Integer, ArrayList<Record>>();
@@ -104,9 +95,8 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public synchronized String createMRecord(String firstName, String lastName, 
-			String employeeID, String mailID,
-			String projects, String location) throws RemoteException {
+	public synchronized String createMRecord (String firstName, String lastName, String employeeID, String mailID, String managerID, 
+			HrCenterApp.DEMSPackage.Project[] projects, HrCenterApp.DEMSPackage.ServerLocation location){
 		
 		
 		
@@ -130,8 +120,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 				return "Email not valid";
 			}
 			
-			String[] projectsPass = projects.split(",");
-			List<String> projectIn = Arrays.asList(projectsPass);
+			List<String> projectIn = ConvertToInternalProjectObj(projects);
 			List<Project> projectToPassIn = new ArrayList<Project>();
 			//Validate Project ID: Must already exists
 			for(Project proj: dbProject) {
@@ -194,6 +183,18 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	}
 
+	private List<String> ConvertToInternalProjectObj(HrCenterApp.DEMSPackage.Project[] projects) {
+		List<String> createdProject = new ArrayList<String>();
+		for(HrCenterApp.DEMSPackage.Project proj: projects) {
+			boolean projCreated = createProject(proj.projectID, proj.clientName, proj.projectName);
+			if(projCreated) {
+				createdProject.add(proj.projectID);
+			}
+			
+		}
+		return createdProject;
+	}
+
 	private String generateUniqueManagerId(Location location) {
 		Random ran = new Random();
 		// From 1000 to 9999
@@ -208,9 +209,8 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public synchronized String createERecord(String firstName, String lastName, 
-			String employeeID, String mailID, String projectID)
-			throws RemoteException {
+	public synchronized String createERecord (String firstName, String lastName, String employeeID,
+			String mailID, String projectID, String managerID){
 		
 		
 		store.writeLog("Attempt to write a new Employee", DEFAULT_LOG_FILE);
@@ -305,10 +305,10 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	}
 
 	@Override
-	public synchronized  String getRecordCount()  throws RemoteException {
+	public synchronized String getRecordCounts (String managerID){
 		StringBuffer outString = new StringBuffer();
 		store.writeLog("Attempt to get number of records in server", DEFAULT_LOG_FILE);
-
+		byte[] localData = null;
 			HashMap<Location, Integer> serverConfiguration = PortConfiguration.getConfig();
 			for(Location loc: Location.values()) {
 				String locName = loc.toString();
@@ -321,7 +321,13 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 						outString.append(" ");
 					
 				}else {
-					byte[] localData = getLocalNumberOfRecords();
+
+					try {
+						localData = getLocalNumberOfRecords();
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+					}
 					
 					String localString = null;
 					try {
@@ -342,7 +348,7 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 
 	
 
-	public synchronized  byte[] getLocalNumberOfRecords() throws RemoteException {
+	public synchronized  byte[] getLocalNumberOfRecords() {
 		store.writeLog("Attempt to get the local number of record", DEFAULT_LOG_FILE);
 		int numberOfRecord = 0;
 		byte[] data = null;
@@ -402,13 +408,12 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	
 
 	@Override
-	public synchronized  boolean editRecord(String recordID, String fieldName,
-			Object value) throws RemoteException {
+	public synchronized String editRecord (String recordID, String fieldName, String newValue){
 		
 		store.writeLog("Attemps to Update a Record...", DEFAULT_LOG_FILE);
 		// If the record is not a project/Employee/Manager
 		if(!currentRecordID.contains(recordID) && !currentProjectID.contains(recordID)) {
-			return false;
+			return "Can't update, the record doesn't exists";
 		}
 		// At this point, we know we have the record in our system
 		// Record ID could be ER20222, MR20494, P20123
@@ -417,24 +422,24 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		case 'E':
 			Record erecord = FindRecordWithId(recordID);
 			if(erecord == null) {
-				return false;
+				return "Can't find the Employee";
 			}
-			return UpdateEmployee(erecord, fieldName, value);
+			return UpdateEmployee(erecord, fieldName, newValue);
 		case 'M':
 			Record mrecord = FindRecordWithId(recordID);
 			if(mrecord == null) {
-				return false;
+				return "Can't find the Manager";
 			}
-			return UpdateManager(mrecord, fieldName, value);
+			return UpdateManager(mrecord, fieldName, newValue);
 		case 'P':
 			Project project = FindProjectWithId(recordID);
 			if(project== null) {
-				return false;
+				return "Can't find the project";
 			}
-			return UpdateProject(project, fieldName, value);
+			return UpdateProject(project, fieldName, newValue);
 		default:
 			store.writeLog("editRecord... recordID Not Found", DEFAULT_LOG_FILE);
-			return false;
+			return "Something went wrong";
 			
 		}
 	}
@@ -446,12 +451,12 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * @param value
 	 * @return true if updated
 	 */
-	private boolean UpdateProject(Project proj, String fieldName, Object value) {
+	private String UpdateProject(Project proj, String fieldName, Object value) {
 
 		
 		String[] allowedFields = {"clientName", "projectName"};
 		if(!Arrays.asList(allowedFields).contains(fieldName)) {
-			return false;
+			return "Field not found" ;
 		}
 		
 		try {
@@ -465,12 +470,12 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			dbProject.add(proj);
 			store.addProject(proj);
 			store.writeLog("Project Record Updated", DEFAULT_LOG_FILE);
-			return true;
+			return "Project Update";
 			
 		}catch(Exception ee) {
 			ee.printStackTrace();
 			store.writeLog("Exception while updating project", DEFAULT_LOG_FILE);
-			return true;
+			return "Something went wrong updating project";
 		}
 
 	}
@@ -480,14 +485,14 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * @param mrecord
 	 * @param fieldName
 	 * @param value
-	 * @return true if updated
+	 * @return  feedback message
 	 */
-	private boolean UpdateManager(Record mrecord, String fieldName, Object value) {
+	private String UpdateManager(Record mrecord, String fieldName, String value) {
 
 		
 		String[] allowedFields = {"location", "mailID", "currentProjects"};
 		if(!Arrays.asList(allowedFields).contains(fieldName)) {
-			return false;
+			return "Field not found";
 		}
 		
 		try {
@@ -503,8 +508,14 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			targetUpdate.set(tmpMan, value);
 			
 			if(fieldName.equals("location")) {
+				Location targetLocation = null;
 				// Update the Manager ID with New Location ?
-				tmpMan.setManagerID(generateUniqueManagerId((Location)value));
+				for(Location loc: Location.values()) {
+					if(loc.toString().equalsIgnoreCase(value)) {
+						targetLocation = loc;
+					}
+				}
+				tmpMan.setManagerID(generateUniqueManagerId(targetLocation));
 				currentManagerID.remove(tmpMan.getManagerID());
 				//TODO: Using UDP/IP create a new Manager on the other Server 
 			}else {
@@ -515,13 +526,13 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 				
 			}
 			store.writeLog("Manager Record Updated", DEFAULT_LOG_FILE);			
-			return true;
+			return "Manager record updated";
 			
 		} catch (Exception e) {
 			store.writeLog("FieldName not found", DEFAULT_LOG_FILE);			
 			e.printStackTrace();
 			}
-		return false;
+		return "Something went wrong";
 
 	}
 
@@ -530,13 +541,13 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 	 * @param record
 	 * @param fieldName
 	 * @param value
-	 * @return true if updated
+	 * @return feedback message if updated
 	 */
-	private boolean UpdateEmployee(Record record, String fieldName, Object value) {
+	private String UpdateEmployee(Record record, String fieldName, String value) {
 
 		String[] allowedFields = {"mailID", "projectID"};
 		if(!Arrays.asList(allowedFields).contains(fieldName)) {
-			return false;
+			return "Field not found";
 		}
 		
 		try {
@@ -558,11 +569,11 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 			
 			db.replace(indexList, tmpList);
 			store.writeLog("Employee Record Updated", DEFAULT_LOG_FILE);
-			return true;
+			return "Success field Updated";
 			
 		}catch(Exception ee) {
 			store.writeLog("Problem while updating employee", DEFAULT_LOG_FILE);
-			return false;
+			return "Something went wrong in update";
 		}
 		
 
@@ -609,34 +620,43 @@ public class HRActions extends UnicastRemoteObject implements IHRActions {
 		return foundRec;
 	}
 
-	@Override
-	public String createProject(String projectID, String clientName, String projectName) throws RemoteException {
+	boolean createProject(String projectID, String clientName, String projectName) {
 		store.writeLog("Attempt to write a new Project", DEFAULT_LOG_FILE);
 		char firstChar = projectID.toLowerCase().charAt(0);
 		if(projectID.length() != 6 || firstChar != 'p') {
 			store.writeLog("Wrong project ID format ", DEFAULT_LOG_FILE);
-			return "Error wrong project format";
+			return false;
 		}
 		try {
 			Project newProj = new Project(projectID, clientName, projectName);
 			if(dbProject.contains(newProj)) {
 				store.writeLog("Project Already Exists", DEFAULT_LOG_FILE);
-				return "Project Already Exists";
 			}
 			
 			dbProject.add(newProj);
 			currentProjectID.add(projectID);
 			store.addProject(newProj);
-			
-			return "Project Added";
+			return true;
 			
 		}catch(Exception ee) {
 			store.writeLog("Problem while creating a project", DEFAULT_LOG_FILE);
 			ee.printStackTrace();
-			return ee.getMessage();
+			return false;
 		}
 		
 
+	}
+
+	@Override
+	public String transferRecord(String managerID, String recordID, ServerLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void shutdown() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
