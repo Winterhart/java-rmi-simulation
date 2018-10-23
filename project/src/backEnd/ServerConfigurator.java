@@ -58,7 +58,7 @@ public class ServerConfigurator {
 			serverConf.put(loca, port);
 			PortConfiguration.updateConfig(serverConf);
 			Registry reg = LocateRegistry.createRegistry(port);
-			reg.bind(loca.toString(), instanceHRAction);
+			//reg.bind(loca.toString(), instanceHRAction);
 
 		}catch(Exception ee) {
 			ee.printStackTrace();
