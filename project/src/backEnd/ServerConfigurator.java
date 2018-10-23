@@ -7,7 +7,7 @@ import java.util.HashMap;
 import model.Location;
 import model.PortConfiguration;
 import shared.HRActions;
-import shared.ServerUDP;
+import shared.UDP.ServerUDP;
 import storage.IStore;
 import storage.Logger;
 

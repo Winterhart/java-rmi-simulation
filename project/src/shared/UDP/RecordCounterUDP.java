@@ -1,41 +1,24 @@
-package shared;
+package shared.UDP;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import storage.IStore;
-/**
- * This code is inspired by this tutorial: https://www.baeldung.com/udp-in-java
- * @author winterhart
- *
- */
-public class ServerUDP implements Runnable  {
+import shared.IHRActions;
+
+public class RecordCounterUDP extends ServerUDP implements Runnable {
+
+	public RecordCounterUDP(IHRActions serverInstance, int portUDP) {
+		super(serverInstance, portUDP);
+		// TODO Auto-generated constructor stub
+	}
 	
-	private IHRActions localInstance;
-	private IStore serverStore;
-	private static final String SERVER_ADDRESS = "locahost";
-	private DatagramSocket socket = null;
-	public boolean listen = true;
-	private int assignedPort = 0;
-	
-	public ServerUDP(IHRActions serverInstance, int portUDP) {
-		this.localInstance = serverInstance;
-		this.serverStore = localInstance.store;
-		this.setAssignedPort(portUDP);
-	}
-	public int getAssignedPort() {
-		return assignedPort;
-	}
-	public void setAssignedPort(int assignedPort) {
-		this.assignedPort = assignedPort;
-	}
 	@Override
 	public void run() {
 		DatagramSocket sock = null;
 		try {
 			byte[] buffer = new byte[256];
-			sock = new DatagramSocket(assignedPort);
+			sock = new DatagramSocket(super.getAssignedPort());
 	        while (listen) {
 	        	//buffer = localInstance.getLocalNumberOfRecords();
 	        	DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -55,7 +38,5 @@ public class ServerUDP implements Runnable  {
 		}
 		
 	}
-	
-	
 
 }
