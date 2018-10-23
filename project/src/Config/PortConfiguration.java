@@ -1,6 +1,8 @@
-package model;
+package Config;
 
 import java.util.HashMap;
+
+import model.Location;
 
 public class PortConfiguration {
 		
@@ -42,6 +44,18 @@ public class PortConfiguration {
 
 		public static void updateUdpTransfert(HashMap<Location, Integer> updateUdp){
 			udpTransfertConfig = updateUdp;
+		}
+		
+		public static void addConfig(Location loc, Integer port) {
+			getConfig().put(loc, port);
+		}
+		
+		public static void addConfigUDP(Location loc, Integer port) {
+			getUdpConfig().put(loc, port);
+		}
+		
+		public static void addConfigUDPTransfert(Location loc, Integer port) {
+			getUdpTransfertConfig().put(loc, port);
 		}
 		
 }
