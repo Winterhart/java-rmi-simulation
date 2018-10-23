@@ -24,3 +24,10 @@ hs_err_pid*
 
 #idea folder
 .idea/
+
+# Ignoring .txt files (storage file)
+.storage/**/*.txt
+
+#Ignoring .db file created by ORB
+*.db
+
