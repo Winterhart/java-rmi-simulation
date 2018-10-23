@@ -16,7 +16,10 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.omg.CORBA.ORB;
+
 import Config.PortConfiguration;
+import HrCenterApp.DEMSPOA;
 import HrCenterApp.DEMSPackage.ServerLocation;
 import model.Employee;
 import model.Location;
@@ -25,7 +28,7 @@ import model.Project;
 import model.Record;
 import storage.IStore;
 
-public class HRActions implements IHRActions {
+public class HRActions  extends DEMSPOA implements IHRActions  {
 
 	private String DEFAULT_LOG_FILE = "Log.txt";
 	private Map<Integer, ArrayList<Record>> db;
@@ -34,6 +37,8 @@ public class HRActions implements IHRActions {
 	private List<String> currentProjectID;
 	private List<String> currentManagerID;
 	IStore store;
+	private ORB orb;
+	
 	public HRActions(IStore storingEngine) {
 		super();
 		this.store = storingEngine;
@@ -44,6 +49,10 @@ public class HRActions implements IHRActions {
 		currentManagerID = new ArrayList<String>();
 		buildfakeDatabase();
 		restoreFromStorage();
+	}
+	
+	public void setORB(ORB orb) {
+		this.orb = orb;
 	}
 
 	private void restoreFromStorage() {

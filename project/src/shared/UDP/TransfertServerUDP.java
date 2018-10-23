@@ -11,7 +11,7 @@ public class TransfertServerUDP extends ServerUDP implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("Running transfer with UDP");
+		System.out.println("Running UNIMPLEMENTED transfer with UDP");
 		
 	}
 
