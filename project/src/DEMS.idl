@@ -28,5 +28,9 @@ module HrCenterApp{
     in ServerLocation location);
 
     oneway void shutdown();
+
+    boolean managerLogin(in wstring managerID);
+
+    wstring getWelcomeMessage();
  };
 };

@@ -664,8 +664,21 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 
 	@Override
 	public void shutdown() {
+		orb.shutdown(false);
+	}
+
+	@Override
+	public boolean managerLogin(String managerID) {
 		// TODO Auto-generated method stub
-		
+		return false;
+	}
+
+	@Override
+	public String getWelcomeMessage() {
+		StringBuilder welcomeStatus = new StringBuilder();
+		welcomeStatus.append("Welcome to : " + this.store.getStorageName() + " center");
+		welcomeStatus.append(" currently have " + db.size() + " records");
+		return null;
 	}
 	
 	
