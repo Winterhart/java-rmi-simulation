@@ -317,12 +317,12 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		StringBuffer outString = new StringBuffer();
 		store.writeLog("Attempt to get number of records in server by: " + managerID, DEFAULT_LOG_FILE);
 		byte[] localData = null;
-			HashMap<Location, Integer> serverConfiguration = PortConfiguration.getConfig();
+			HashMap<Location, Integer> serverConfiguration = PortConfiguration.getUdpConfig();
 			for(Location loc: Location.values()) {
 				String locName = loc.toString();
 				String storageName = store.getStorageName();
 				if(!locName.equals(storageName)) {
-						int port = serverConfiguration.get(loc) + 1;
+						int port = serverConfiguration.get(loc);
 						String resp  = getNumberOfRecordsWithServer(port);
 						store.writeLog("Append with " + resp, DEFAULT_LOG_FILE);
 						outString.append(resp);
