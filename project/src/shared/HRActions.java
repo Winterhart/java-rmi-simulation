@@ -221,7 +221,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			String mailID, String projectID, String managerID){
 		
 		
-		store.writeLog("Attempt to write a new Employee", DEFAULT_LOG_FILE);
+		store.writeLog("Attempt to write a new Employee by: " + managerID, DEFAULT_LOG_FILE);
 		Employee newEmployee = null;
 		
 		try {
@@ -315,7 +315,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	@Override
 	public synchronized String getRecordCounts (String managerID){
 		StringBuffer outString = new StringBuffer();
-		store.writeLog("Attempt to get number of records in server", DEFAULT_LOG_FILE);
+		store.writeLog("Attempt to get number of records in server by: " + managerID, DEFAULT_LOG_FILE);
 		byte[] localData = null;
 			HashMap<Location, Integer> serverConfiguration = PortConfiguration.getConfig();
 			for(Location loc: Location.values()) {
@@ -366,7 +366,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	}
 
 	public synchronized  byte[] getLocalNumberOfRecords(String managerID) {
-		store.writeLog("Attempt to get the local number of record", DEFAULT_LOG_FILE);
+		store.writeLog("Attempt to get the local number of record by: " + managerID, DEFAULT_LOG_FILE);
 
 		byte[] data = null;
 
@@ -424,7 +424,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	public synchronized String editRecord (String recordID, String fieldName, 
 			String newValue, String managerID){
 		
-		store.writeLog("Attemps to Update a Record...", DEFAULT_LOG_FILE);
+		store.writeLog("Attemps to Update a Record... by: " + managerID, DEFAULT_LOG_FILE);
 		// If the record is not a project/Employee/Manager
 		if(!currentRecordID.contains(recordID) && !currentProjectID.contains(recordID)) {
 			return "Can't update, the record doesn't exists";
@@ -669,7 +669,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 
 	@Override
 	public void shutdown(String managerID) {
-		store.writeLog("Server has been shutdown", DEFAULT_LOG_FILE);
+		store.writeLog("Server has been shutdown by: " + managerID, DEFAULT_LOG_FILE);
 		orb.shutdown(false);
 	}
 
