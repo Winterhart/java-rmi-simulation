@@ -20,13 +20,13 @@ public class HrManagerLauncher {
 			 DEMS demsImpl = null;;
 	    	  System.out.println("Start Hello Client" );
 	    	  demsImpl = getServerInstance(args, Location.CA);
-	    	  System.out.println(demsImpl.getWelcomeMessage());
+	    	  System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
 	    	  
 	    	  demsImpl = getServerInstance(args, Location.US);
-	    	  System.out.println(demsImpl.getWelcomeMessage());
+	    	  System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
 	    	  
 	    	  demsImpl = getServerInstance(args, Location.UK);
-	    	  System.out.println(demsImpl.getWelcomeMessage());
+	    	  System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

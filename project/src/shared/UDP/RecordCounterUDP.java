@@ -24,7 +24,7 @@ public class RecordCounterUDP extends ServerUDP implements Runnable {
 	        	DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 	        	sock.receive(packet);
 	        	InetAddress add = packet.getAddress();
-	        	buffer = localInstance.getLocalNumberOfRecords();
+	        	buffer = localInstance.getLocalNumberOfRecords("FakeManagerID");
 	        	DatagramPacket reply = new DatagramPacket(buffer, buffer.length,
 	        			add, packet.getPort());
 	        	

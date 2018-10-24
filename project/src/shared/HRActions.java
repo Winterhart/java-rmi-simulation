@@ -673,8 +673,38 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 
 	@Override
 	public boolean managerLogin(String managerID) {
-		// TODO Auto-generated method stub
+		List<Manager> allManagers = new ArrayList<Manager>();
+		allManagers = this.getAllManagers();
+		for(Manager manager: allManagers) {
+			if(manager.getManagerID().equalsIgnoreCase(managerID)) {
+				return true;
+			}
+		}
 		return false;
+	}
+
+	private List<Manager> getAllManagers() {
+		List<Manager> allManagers = new ArrayList<Manager>();
+		for(List<Record> list: db.values()) {
+			for(Record record : list) {
+				if(record instanceof Manager) {
+					allManagers.add((Manager)record);
+				}
+			}
+		}
+		return allManagers;
+	}
+	
+	private List<Employee> getAllEmployee() {
+		List<Employee> allEmployees = new ArrayList<Employee>();
+		for(List<Record> list: db.values()) {
+			for(Record record : list) {
+				if(record instanceof Employee) {
+					allEmployees.add((Employee)record);
+				}
+			}
+		}
+		return allEmployees;
 	}
 
 	@Override

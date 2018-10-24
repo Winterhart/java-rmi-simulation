@@ -1,2 +1,2 @@
 Record:Bob|Bobinson|ER20321|bob.bobinson@bobbob.com|P00001
-Record:Bob|Bobinson|ER20321|bob.bobinson@bobbob.com|P00001
+Record:MR44300|CA3841|Bob|Scott|bbscott@dundermuflin.com|P00001|US

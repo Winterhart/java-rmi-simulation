@@ -40,7 +40,7 @@ class TestConcurentClient {
 		}
 		@Override
 		public void run() {
-			System.out.println(dem.getWelcomeMessage());
+			System.out.println(dem.getWelcomeMessage("FakeManagerId"));
 		}
 
 	}
