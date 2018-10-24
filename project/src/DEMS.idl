@@ -13,7 +13,8 @@ module HrCenterApp{
 
     wstring createMRecord(in wstring firstName, in wstring lastName,
     in wstring employeeID, in wstring mailID, in wstring managerID,
-    in managerProjects projects, in ServerLocation location);
+    in managerProjects projects, in ServerLocation location,
+    in wstring managerAuthorOfRequest);
 
     wstring createERecord(in wstring firstName, in wstring lastName,
     in wstring employeeID, in wstring mailID, in wstring projectID,
@@ -27,10 +28,10 @@ module HrCenterApp{
     wstring transferRecord(in wstring managerID, in wstring recordID,
     in ServerLocation location);
 
-    oneway void shutdown();
+    oneway void shutdown(in wstring managerID);
 
     boolean managerLogin(in wstring managerID);
 
-    wstring getWelcomeMessage();
+    wstring getWelcomeMessage(in wstring managerID);
  };
 };

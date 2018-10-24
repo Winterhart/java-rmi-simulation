@@ -24,7 +24,7 @@ public interface IHRActions extends DEMSOperations {
 	 */
 	 public String createMRecord (String firstName, String lastName, String employeeID, 
 			 String mailID, String managerID, HrCenterApp.DEMSPackage.Project[] projects, 
-			 HrCenterApp.DEMSPackage.ServerLocation location);
+			 HrCenterApp.DEMSPackage.ServerLocation location, String authorOfRequest);
 		/**
 		 * When a manager invokes this method from a ManagerClient, the server associated with
 		 *	this manager
@@ -68,9 +68,9 @@ public interface IHRActions extends DEMSOperations {
 	 /**
 	  * Shut down the entire system...
 	  */
-	 public void shutdown ();
+	 public void shutdown (String managerID);
 	 
-	 public  byte[] getLocalNumberOfRecords(); 
+	 public  byte[] getLocalNumberOfRecords(String managerID); 
 	
 	
 

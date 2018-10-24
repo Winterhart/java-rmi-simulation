@@ -1,7 +1,5 @@
 package shared;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.lang.reflect.Field;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -105,7 +103,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 
 	@Override
 	public synchronized String createMRecord (String firstName, String lastName, String employeeID, String mailID, String managerID, 
-			HrCenterApp.DEMSPackage.Project[] projects, HrCenterApp.DEMSPackage.ServerLocation location){
+			HrCenterApp.DEMSPackage.Project[] projects, HrCenterApp.DEMSPackage.ServerLocation location, String managerAuthorOfRequest){
 		
 		
 		
@@ -332,7 +330,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 				}else {
 
 					try {
-						localData = getLocalNumberOfRecords();
+						localData = getLocalNumberOfRecords(managerID);
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
@@ -366,7 +364,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		return numberOfRecord;
 	}
 
-	public synchronized  byte[] getLocalNumberOfRecords() {
+	public synchronized  byte[] getLocalNumberOfRecords(String managerID) {
 		store.writeLog("Attempt to get the local number of record", DEFAULT_LOG_FILE);
 
 		byte[] data = null;
@@ -668,7 +666,8 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	}
 
 	@Override
-	public void shutdown() {
+	public void shutdown(String managerID) {
+		store.writeLog("Server has been shutdown", DEFAULT_LOG_FILE);
 		orb.shutdown(false);
 	}
 
@@ -679,12 +678,13 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	}
 
 	@Override
-	public String getWelcomeMessage() {
+	public String getWelcomeMessage(String managerID) {
 		StringBuilder welcomeStatus = new StringBuilder();
 		welcomeStatus.append("Welcome to : " + this.store.getStorageName() + " center");
 		welcomeStatus.append(" currently have " + this.getNumberOfRecordsHelper() + " records");
 		return welcomeStatus.toString();
 	}
+
 	
 	
 
