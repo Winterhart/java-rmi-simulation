@@ -102,12 +102,13 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	}
 
 	@Override
-	public synchronized String createMRecord (String firstName, String lastName, String employeeID, String mailID, String managerID, 
-			HrCenterApp.DEMSPackage.Project[] projects, HrCenterApp.DEMSPackage.ServerLocation location, String managerAuthorOfRequest){
+	public synchronized String createMRecord (String firstName, String lastName, String employeeID, 
+			String mailID, HrCenterApp.DEMSPackage.Project[] projects, 
+			HrCenterApp.DEMSPackage.ServerLocation location, String managerAuthorOfRequest){
 		
 		
 		
-		store.writeLog("Attempt to write a new Manager", DEFAULT_LOG_FILE);
+		store.writeLog("Attempt to write a new Manager: " + managerAuthorOfRequest , DEFAULT_LOG_FILE);
 		Manager newManager = null;
 		try {
 			//Validate EmployeeID: (7 letters, "ER" at beginning, and not already taken)

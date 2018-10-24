@@ -12,7 +12,7 @@ module HrCenterApp{
     typedef sequence<Project> managerProjects;
 
     wstring createMRecord(in wstring firstName, in wstring lastName,
-    in wstring employeeID, in wstring mailID, in wstring managerID,
+    in wstring employeeID, in wstring mailID,
     in managerProjects projects, in ServerLocation location,
     in wstring managerAuthorOfRequest);
 

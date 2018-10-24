@@ -23,7 +23,7 @@ public interface IHRActions extends DEMSOperations {
 	 *	was successful or not and both the server
 	 */
 	 public String createMRecord (String firstName, String lastName, String employeeID, 
-			 String mailID, String managerID, HrCenterApp.DEMSPackage.Project[] projects, 
+			 String mailID, HrCenterApp.DEMSPackage.Project[] projects, 
 			 HrCenterApp.DEMSPackage.ServerLocation location, String authorOfRequest);
 		/**
 		 * When a manager invokes this method from a ManagerClient, the server associated with
