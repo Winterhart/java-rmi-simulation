@@ -355,18 +355,23 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	}
 				
 
-	
-
-	public synchronized  byte[] getLocalNumberOfRecords() {
-		store.writeLog("Attempt to get the local number of record", DEFAULT_LOG_FILE);
+	private int getNumberOfRecordsHelper() {
 		int numberOfRecord = 0;
-		byte[] data = null;
 		for(ArrayList<Record> list: db.values()) {
 			if(list != null) {
 				numberOfRecord = numberOfRecord + list.size();
 			}
 		}
+		
+		return numberOfRecord;
+	}
 
+	public synchronized  byte[] getLocalNumberOfRecords() {
+		store.writeLog("Attempt to get the local number of record", DEFAULT_LOG_FILE);
+
+		byte[] data = null;
+
+		int numberOfRecord =  getNumberOfRecordsHelper();
 		String dd = store.getStorageName() + ": " +  Integer.toString(numberOfRecord);
 		store.writeLog("Local Number of Record " + dd, DEFAULT_LOG_FILE);
 		try {
@@ -677,8 +682,8 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	public String getWelcomeMessage() {
 		StringBuilder welcomeStatus = new StringBuilder();
 		welcomeStatus.append("Welcome to : " + this.store.getStorageName() + " center");
-		welcomeStatus.append(" currently have " + db.size() + " records");
-		return null;
+		welcomeStatus.append(" currently have " + this.getNumberOfRecordsHelper() + " records");
+		return welcomeStatus.toString();
 	}
 	
 	

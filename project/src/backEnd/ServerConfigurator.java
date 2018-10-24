@@ -107,13 +107,14 @@ public class ServerConfigurator {
 			
 			//Creating a CORBA object
 			POA rootPoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+			rootPoa.the_POAManager().activate();
 			
 			instanceHRAction.setORB(orb);
 			org.omg.CORBA.Object ref = rootPoa.servant_to_reference(instanceHRAction);
 			DEMS href = DEMSHelper.narrow(ref);
 			
 			// Name the service same as location
-			org.omg.CORBA.Object objRef = orb.resolve_initial_references(loca.toString());
+			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
 			
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 			String name = loca.toString();
@@ -124,7 +125,7 @@ public class ServerConfigurator {
 			
 
 		}catch(Exception ee) {
-			System.out.println("Problem while starting udp servers of " + loca.toString()
+			System.out.println(" \n\n ****WARNING ****** Problem while starting udp servers of " + loca.toString()
 					+ " " + ee.getMessage());
 		}
 		
