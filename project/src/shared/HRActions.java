@@ -420,7 +420,8 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	
 
 	@Override
-	public synchronized String editRecord (String recordID, String fieldName, String newValue){
+	public synchronized String editRecord (String recordID, String fieldName, 
+			String newValue, String managerID){
 		
 		store.writeLog("Attemps to Update a Record...", DEFAULT_LOG_FILE);
 		// If the record is not a project/Employee/Manager
@@ -695,7 +696,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		return allManagers;
 	}
 	
-	private List<Employee> getAllEmployee() {
+	private List<Employee> getAllEmployees() {
 		List<Employee> allEmployees = new ArrayList<Employee>();
 		for(List<Record> list: db.values()) {
 			for(Record record : list) {
@@ -710,7 +711,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	@Override
 	public String getWelcomeMessage(String managerID) {
 		StringBuilder welcomeStatus = new StringBuilder();
-		welcomeStatus.append("Welcome to : " + this.store.getStorageName() + " center");
+		welcomeStatus.append("Welcome " + managerID + " to : " + this.store.getStorageName() + " center");
 		welcomeStatus.append(" currently have " + this.getNumberOfRecordsHelper() + " records");
 		return welcomeStatus.toString();
 	}

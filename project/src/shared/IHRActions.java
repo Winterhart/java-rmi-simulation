@@ -55,7 +55,7 @@ public interface IHRActions extends DEMSOperations {
 		 * @return Upon success
 			or failure, it returns a message to the manager and the logs are updated
 		 */
-	 public String editRecord (String recordID, String fieldName, String newValue);
+	 public String editRecord (String recordID, String fieldName, String newValue, String managerID);
 	 /**
 	  * When a HR manager invokes this method from his/her center, the server associated
 	  * with this manager (determined by the managerID prefix) searches its hash map to find

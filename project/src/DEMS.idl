@@ -23,7 +23,7 @@ module HrCenterApp{
     wstring getRecordCounts(in wstring managerID);
 
     wstring editRecord(in wstring recordID, in wstring fieldName,
-    in wstring newValue);
+    in wstring newValue, in wstring managerID);
 
     wstring transferRecord(in wstring managerID, in wstring recordID,
     in ServerLocation location);
