@@ -663,7 +663,67 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	@Override
 	public String transferRecord(String managerID, String recordID,
 			HrCenterApp.DEMSPackage.Location location) {
-		// TODO Auto-generated method stub
+
+		Location targetLocation = null;
+		Record recordFound = null;
+		recordFound = FindRecordWithId(recordID);
+		
+		if(recordFound == null) {
+			return "Could not find the record on the local server database";
+		}
+		store.writeLog("Attempt to transfert Record: " + recordFound.getRecordID()
+		 + " by: " + managerID, DEFAULT_LOG_FILE);
+		
+		
+		
+		for(Location loc: Location.values()) {
+			if(location.locationName.equalsIgnoreCase(loc.toString())) {
+				targetLocation = loc;
+			}
+		}
+		
+		if(targetLocation == null) {
+			return "Could not find the location";
+		}
+		if(targetLocation.toString().equals(store.getStorageName())) {
+			return "You can't transfer to your own server";
+		}
+		
+		HashMap<Location, Integer> udpTransfertServer = PortConfiguration.getUdpTransfertConfig();
+
+		
+		int port = udpTransfertServer.get(targetLocation);
+		
+		String returningString = null;
+		byte[] buffer = new byte[200];
+		DatagramSocket socketData = null;		
+		byte[] dataReceived = new byte[200];
+		try {
+			InetAddress aHost = InetAddress.getByName("localhost");
+			socketData = new DatagramSocket();
+			buffer = "Haye haye".getBytes();
+			DatagramPacket r = new DatagramPacket(buffer, buffer.length, aHost, port);
+			socketData.send(r);
+
+			r  = new DatagramPacket(buffer, buffer.length);
+			socketData.setSoTimeout(3000);
+			socketData.receive(r);
+			String dataRe = new String(r.getData(), StandardCharsets.UTF_8);
+			store.writeLog("Attempt to get Record on port  dataRe " + dataRe, DEFAULT_LOG_FILE);
+			returningString = dataRe.trim();
+			System.out.println(returningString);
+
+		}catch(Exception ee) {
+			ee.printStackTrace();
+		}
+		finally {
+			if(socketData != null) {
+				socketData.close();
+			}
+		}
+		
+		
+		
 		return null;
 	}
 
@@ -716,6 +776,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		welcomeStatus.append(" currently have " + this.getNumberOfRecordsHelper() + " records");
 		return welcomeStatus.toString();
 	}
+
 
 	
 	

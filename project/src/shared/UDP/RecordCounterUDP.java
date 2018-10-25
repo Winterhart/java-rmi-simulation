@@ -10,7 +10,6 @@ public class RecordCounterUDP extends ServerUDP implements Runnable {
 
 	public RecordCounterUDP(IHRActions serverInstance, int portUDP) {
 		super(serverInstance, portUDP);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -20,7 +19,6 @@ public class RecordCounterUDP extends ServerUDP implements Runnable {
 			byte[] buffer = new byte[256];
 			sock = new DatagramSocket(super.getAssignedPort());
 	        while (listen) {
-	        	//buffer = localInstance.getLocalNumberOfRecords();
 	        	DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 	        	sock.receive(packet);
 	        	InetAddress add = packet.getAddress();

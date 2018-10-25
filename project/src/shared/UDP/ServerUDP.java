@@ -16,7 +16,6 @@ public abstract class ServerUDP implements Runnable  {
 	IHRActions localInstance;
 	IStore serverStore;
 	private static final String SERVER_ADDRESS = "locahost";
-	private DatagramSocket socket = null;
 	public boolean listen = true;
 	private int assignedPort = 0;
 	
