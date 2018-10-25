@@ -690,8 +690,6 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		}
 		
 		HashMap<Location, Integer> udpTransfertServer = PortConfiguration.getUdpTransfertConfig();
-
-		
 		int port = udpTransfertServer.get(targetLocation);
 		
 		String returningString = null;

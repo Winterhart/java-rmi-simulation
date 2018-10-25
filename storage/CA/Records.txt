@@ -1,2 +1,3 @@
 Record:Bob|Bobinson|ER20321|bob.bobinson@bobbob.com|P00001
 Record:MR44300|CA3841|Bob|Scott|bbscott@dundermuflin.com|P00001|US
+Record:MR10342|CA1135|SuperTest|BBo|goade@gma.com|P00222,|CA

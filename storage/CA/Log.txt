@@ -1152,3 +1152,171 @@ Problem restoring record with      who: CA   when: Wed Oct 24 18:52:49 EDT 2018
 We have 2 records to restore    who: CA   when: Wed Oct 24 18:52:49 EDT 2018
 RecordIndex1    who: CA   when: Wed Oct 24 18:52:49 EDT 2018
 RecordIndex18    who: CA   when: Wed Oct 24 18:52:49 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Attempt to write a new Project    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Wrong project ID format     who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+null    who: CA   when: Wed Oct 24 19:16:50 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Attempt to write a new Project    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Wrong project ID format     who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+null    who: CA   when: Wed Oct 24 19:19:37 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 19:22:55 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 19:22:55 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 19:22:55 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 19:22:55 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 19:22:55 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 19:22:55 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 19:23:04 EDT 2018
+Attempt to write a new Project    who: CA   when: Wed Oct 24 19:23:08 EDT 2018
+Wrong project ID format     who: CA   when: Wed Oct 24 19:23:08 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:08:27 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:09:36 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:11:56 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:13:38 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:21:32 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:23:34 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 20:23:42 EDT 2018
+Attempt to write a new Project    who: CA   when: Wed Oct 24 20:23:48 EDT 2018
+Wrong project ID format     who: CA   when: Wed Oct 24 20:23:48 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:25:39 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 20:25:40 EDT 2018
+Attempt to write a new Project    who: CA   when: Wed Oct 24 20:25:45 EDT 2018
+Wrong project ID format     who: CA   when: Wed Oct 24 20:25:45 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:26:27 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 20:26:31 EDT 2018
+Attempt to write a new Project    who: CA   when: Wed Oct 24 20:26:35 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:28:20 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:28:20 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:28:20 EDT 2018
+We have 2 records to restore    who: CA   when: Wed Oct 24 20:28:20 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:28:20 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:28:20 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 20:28:22 EDT 2018
+Attempt to write a new Project    who: CA   when: Wed Oct 24 20:28:28 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+We have 3 records to restore    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+Building Database...    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+Restoring Data from Storage...    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+Problem restoring record with      who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+We have 3 records to restore    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+RecordIndex18    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+RecordIndex1    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
+Attempt to write a new Manager: CA3841    who: CA   when: Wed Oct 24 20:30:32 EDT 2018
