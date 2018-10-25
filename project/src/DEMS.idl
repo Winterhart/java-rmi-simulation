@@ -7,13 +7,16 @@ module HrCenterApp{
      wstring projectName;
      };
 
-    enum ServerLocation {CA, US, UK};
+     struct Location {
 
+     wstring locationName;
+
+     };
     typedef sequence<Project> managerProjects;
 
     wstring createMRecord(in wstring firstName, in wstring lastName,
     in wstring employeeID, in wstring mailID,
-    in managerProjects projects, in ServerLocation location,
+    in managerProjects projects, in Location location,
     in wstring managerAuthorOfRequest);
 
     wstring createERecord(in wstring firstName, in wstring lastName,
@@ -26,7 +29,7 @@ module HrCenterApp{
     in wstring newValue, in wstring managerID);
 
     wstring transferRecord(in wstring managerID, in wstring recordID,
-    in ServerLocation location);
+    in Location location);
 
     oneway void shutdown(in wstring managerID);
 

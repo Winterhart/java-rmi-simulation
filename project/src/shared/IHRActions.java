@@ -24,7 +24,7 @@ public interface IHRActions extends DEMSOperations {
 	 */
 	 public String createMRecord (String firstName, String lastName, String employeeID, 
 			 String mailID, HrCenterApp.DEMSPackage.Project[] projects, 
-			 HrCenterApp.DEMSPackage.ServerLocation location, String authorOfRequest);
+			 HrCenterApp.DEMSPackage.Location location, String authorOfRequest);
 		/**
 		 * When a manager invokes this method from a ManagerClient, the server associated with
 		 *	this manager
@@ -64,7 +64,8 @@ public interface IHRActions extends DEMSOperations {
 	  *	remoteCenterServer. If the record does not exist in the remoteCenterServer, then the
 	  *	entire record is transferred to the remoteCenterServer.
 	  */
-	 public String transferRecord (String managerID, String recordID, HrCenterApp.DEMSPackage.ServerLocation location);
+	 public String transferRecord (String managerID, String recordID, 
+			 HrCenterApp.DEMSPackage.Location location);
 	 /**
 	  * Shut down the entire system...
 	  */

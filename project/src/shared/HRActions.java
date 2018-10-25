@@ -104,9 +104,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	@Override
 	public synchronized String createMRecord (String firstName, String lastName, String employeeID, 
 			String mailID, HrCenterApp.DEMSPackage.Project[] projects, 
-			HrCenterApp.DEMSPackage.ServerLocation location, String managerAuthorOfRequest){
-		
-		
+			HrCenterApp.DEMSPackage.Location location, String managerAuthorOfRequest){
 		
 		store.writeLog("Attempt to write a new Manager: " + managerAuthorOfRequest , DEFAULT_LOG_FILE);
 		Manager newManager = null;
@@ -115,17 +113,17 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			String employeeIDUpper = employeeID.toUpperCase();
 			if(employeeIDUpper.length() != 7 ||
 					!employeeIDUpper.startsWith("MR")) {
-				return "Wrong Employee ID";
+				return "Wrong Employee ID, you can change an already existing manager";
 			}
-			// If employee already exists... ?
-			if(currentRecordID.contains(employeeIDUpper)) {
-				return "Manager Already Exists";
-			}
-			
 			
 			// Validate Mail
 			if(!emailIsNotValid(mailID)) {
-				return "Email not valid";
+				return "Email not valid, you can change an already existing manager";
+			}
+			
+			// If employee already exists... ?
+			if(currentRecordID.contains(employeeIDUpper)) {
+				return "Manager Already Exists, you can change an already existing manager";
 			}
 			
 			List<String> projectIn = ConvertToInternalProjectObj(projects);
@@ -137,14 +135,15 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 				}
 			}
 			
+			// Make sure location is real
 			Location locationE = null;
 			for(Location loc: Location.values()) {
-				if(loc.toString().equals(location)) {
+				if(loc.toString().equals(location.locationName)) {
 					locationE = loc;
 				}
 			}
 			
-			newManager = new Manager(employeeIDUpper, generateUniqueManagerId(locationE),
+			newManager = new Manager(employeeIDUpper, generateUniqueManagerId(locationE.toString()),
 					firstName, lastName, mailID, projectToPassIn, locationE);
 			
 			//Obtain first Letter of LastName for DB
@@ -203,11 +202,11 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		return createdProject;
 	}
 
-	private String generateUniqueManagerId(Location location) {
+	private String generateUniqueManagerId(String location) {
 		Random ran = new Random();
 		// From 1000 to 9999
 		int randomInt = ran.nextInt(8999) + 1000;
-		String managerId = location.toString() + Integer.toString(randomInt);
+		String managerId = location + Integer.toString(randomInt);
 		while(currentManagerID.contains(managerId)) {
 			randomInt = ran.nextInt(8999) + 1000;
 			managerId = location.toString() + Integer.toString(randomInt);
@@ -529,7 +528,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 						targetLocation = loc;
 					}
 				}
-				tmpMan.setManagerID(generateUniqueManagerId(targetLocation));
+				tmpMan.setManagerID(generateUniqueManagerId(targetLocation.toString()));
 				currentManagerID.remove(tmpMan.getManagerID());
 				//TODO: Using UDP/IP create a new Manager on the other Server 
 			}else {
@@ -662,7 +661,8 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	}
 
 	@Override
-	public String transferRecord(String managerID, String recordID, ServerLocation location) {
+	public String transferRecord(String managerID, String recordID,
+			HrCenterApp.DEMSPackage.Location location) {
 		// TODO Auto-generated method stub
 		return null;
 	}
