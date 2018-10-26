@@ -27,7 +27,7 @@ class TestTransfertMethodUDP {
 			socketData.send(r);
 
 			r  = new DatagramPacket(buffer, buffer.length);
-			socketData.setSoTimeout(5000);
+			//socketData.setSoTimeout(5000);
 			socketData.receive(r);
 			String dataRe = new String(r.getData(), StandardCharsets.UTF_8);
 			returningString = dataRe.trim();

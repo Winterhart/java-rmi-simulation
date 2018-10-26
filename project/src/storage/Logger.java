@@ -155,7 +155,7 @@ public class Logger implements IStore {
 	@Override
 	public void removeRecord(Record mrecord) {
 		int lineNumberToRemove = findRecord(mrecord);
-		if(lineNumberToRemove == 0) {
+		if(lineNumberToRemove == 99999) {
 			return;
 		}
 		try {
@@ -201,17 +201,17 @@ public class Logger implements IStore {
 				lineNumber++;
 			}
 			
-			return 0;
+			return 99999;
 		}catch(IOException ee) {
 			ee.printStackTrace();
-			return 0;
+			return 99999;
 		}
 	}
 
 	@Override
 	public void removeProject(Project proj) {
 		int lineNumberToRemove = findProject(proj);
-		if(lineNumberToRemove == 0) {
+		if(lineNumberToRemove == 99999) {
 			return;
 		}
 		try {
@@ -256,10 +256,10 @@ public class Logger implements IStore {
 				}
 				lineNumber++;
 			}
-			return 0;
+			return 99999;
 		}catch(IOException ee) {
 			ee.printStackTrace();
-			return 0;
+			return 99999;
 		}
 	}
 

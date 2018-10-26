@@ -1,4 +1,3 @@
-Record:MR33232|CA1135|Micheal|Scott|DataMike@dunderM.com|P2222,P2344,|CA
-Record:ER45453|Vivian|Bobinson|Vivi@vlv.com|P2222
 
-Record:ER12345|Marcel|Courage|superMarchel@marcel.com|P2222
+Record:ER45453|Vivian|Bobinson|viviane@vivivi.com|P23441
+Record:MR33232|CA2779|Micheal|Scott|DataMike@dunderM.com|P22221,|CA

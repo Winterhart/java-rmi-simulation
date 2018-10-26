@@ -29,12 +29,12 @@ import storage.IStore;
 public class HRActions  extends DEMSPOA implements IHRActions  {
 
 	private String DEFAULT_LOG_FILE = "Log.txt";
-	private Map<Integer, ArrayList<Record>> db;
-	private List<Project> dbProject;
+	private  Map<Integer, ArrayList<Record>> db;
+	private  List<Project> dbProject;
 	private List<String> currentRecordID;
 	private List<String> currentProjectID;
-	private List<String> currentManagerID;
-	volatile IStore store;
+	private  List<String> currentManagerID;
+	IStore store;
 
 
 	private ORB orb;
@@ -63,6 +63,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		currentProjectID.clear();
 		db.clear();
 		currentRecordID.clear();
+		currentManagerID.clear();
 	}
 	private void restoreFromStorage() {		
 		store.writeLog("Restoring Data from Storage...", DEFAULT_LOG_FILE);
@@ -132,8 +133,9 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			}
 			
 			// If employee already exists... ?
-			if(currentRecordID.contains(employeeIDUpper)) {
-				return "Manager Already Exists, you can change an already existing manager";
+			if(this.FindRecordWithId(employeeID) != null) {
+				return "Manager: " + employeeIDUpper 
+						+ " Already Exists, you can change an already existing manager";
 			}
 			
 			List<String> projectIn = ConvertToInternalProjectObj(projects);
@@ -193,7 +195,8 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			// Add to the storage
 			store.addRecord(newManager);
 		
-			return "Manager created: " + newManager.getEmployeeID();
+			return "Manager created: " + newManager.getEmployeeID() 
+				+ " with Manager id: "  + newManager.getManagerID();
 			
 		}catch(Exception ee) {
 			
@@ -213,7 +216,6 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			if(projCreated) {
 				createdProject.add(proj.projectID);
 			}
-			
 		}
 		return createdProject;
 	}
@@ -463,7 +465,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			if(mrecord == null) {
 				return "Can't find the Manager";
 			}
-			return UpdateManager(mrecord, fieldName, newValue);
+			return UpdateManager(mrecord, fieldName, newValue, managerID);
 		case 'P':
 			Project project = FindProjectWithId(recordID);
 			if(project== null) {
@@ -520,10 +522,10 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	 * @param value
 	 * @return  feedback message
 	 */
-	private String UpdateManager(Record mrecord, String fieldName, String value) {
+	private String UpdateManager(Record mrecord, String fieldName, String value, String managerId) {
 
 		
-		String[] allowedFields = {"location", "mailID", "currentProjects"};
+		String[] allowedFields = {"location", "mailID"};
 		if(!Arrays.asList(allowedFields).contains(fieldName)) {
 			return "Field not found";
 		}
@@ -533,28 +535,29 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			Manager tmpMan = (Manager)mrecord;
 			int indexList = getIndexFirstLetter(tmpMan.getLastName().toLowerCase());
 			ArrayList<Record>tmpList = db.get(indexList);
-			tmpList.remove(mrecord);
-			store.removeRecord(mrecord);
-			
-			Field targetUpdate = mrecord.getClass().getDeclaredField(fieldName);
-			targetUpdate.setAccessible(true);
-			targetUpdate.set(tmpMan, value);
-			
+		
 			if(fieldName.equals("location")) {
-				Location targetLocation = null;
-				// Update the Manager ID with New Location ?
-				for(Location loc: Location.values()) {
-					if(loc.toString().equalsIgnoreCase(value)) {
-						targetLocation = loc;
-					}
-				}
-				tmpMan.setManagerID(generateUniqueManagerId(targetLocation.toString()));
-				currentManagerID.remove(tmpMan.getManagerID());
+				
+				HrCenterApp.DEMSPackage.Location formatedLocation = 
+						new HrCenterApp.DEMSPackage.Location(value);
+				tmpMan.setManagerID(generateUniqueManagerId(value));
 				//TODO: Using UDP/IP create a new Manager on the other Server 
+				String status = this.transferRecord(managerId, mrecord.getRecordID(), formatedLocation);
+				store.writeLog("Manager Transfering: " + status, DEFAULT_LOG_FILE);	
+				
+				if(!status.contains("Record Transfered")) {
+					store.writeLog("Manager Failure to Update Manager", DEFAULT_LOG_FILE);			
+					return "Failure to update Manager";
+				}
 			}else {
+				Field targetUpdate = mrecord.getClass().getDeclaredField(fieldName);
+				targetUpdate.setAccessible(true);
+				targetUpdate.set(tmpMan, value);
 				// Update internal db
+				tmpList.remove(mrecord);	
 				tmpList.add(tmpMan);
 				db.replace(indexList, tmpList);
+				store.removeRecord(mrecord);
 				store.addRecord(mrecord);
 				
 			}
@@ -562,7 +565,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			return "Manager record updated";
 			
 		} catch (Exception e) {
-			store.writeLog("FieldName not found", DEFAULT_LOG_FILE);			
+			store.writeLog("FieldName not found: " + e.getMessage(), DEFAULT_LOG_FILE);			
 			e.printStackTrace();
 			}
 		return "Something went wrong";
@@ -662,13 +665,13 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		}
 		try {
 			Project newProj = new Project(projectID, clientName, projectName);
-			if(dbProject.contains(newProj)) {
+			if(dbProject.contains(newProj) || currentProjectID.contains(newProj.getProjectID())) {
 				store.writeLog("Project Already Exists", DEFAULT_LOG_FILE);
+			}else {
+				dbProject.add(newProj);
+				currentProjectID.add(projectID);
+				store.addProject(newProj);
 			}
-			
-			dbProject.add(newProj);
-			currentProjectID.add(projectID);
-			store.addProject(newProj);
 			return true;
 			
 		}catch(Exception ee) {
@@ -730,7 +733,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 							"UDP");
 					if(creationStatus.contains("Manager created:")) {
 						// Success 
-						store.writeLog("Sucess Receiving record: " + man.getEmployeeID(), DEFAULT_LOG_FILE);
+						store.writeLog("Sucess Receiving record: " + man.getEmployeeID() + " " + creationStatus, DEFAULT_LOG_FILE);
 						return "Record Transfered";
 					}else {
 						store.writeLog("Record Refused by :" + store.getStorageName() + " Server because: " 
@@ -780,8 +783,10 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			HrCenterApp.DEMSPackage.Location location) {
 
 		Location targetLocation = null;
+		Record originalRecord = null;
 		Record recordFound = null;
 		recordFound = FindRecordWithId(recordID);
+		originalRecord = FindRecordWithId(recordID);
 		if(recordFound == null) {
 			return "Could not find the record on the local server database";
 		}
@@ -824,27 +829,38 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		String returningString = null;
 		byte[] buffer = new byte[1000];
 		DatagramSocket socketData = null;		
-		byte[] dataReceived = new byte[1000];
 		try {
 			InetAddress aHost = InetAddress.getByName("localhost");
 			socketData = new DatagramSocket();
 			buffer = dataOut.getBytes();
 			DatagramPacket r = new DatagramPacket(buffer, buffer.length, aHost, port);
 			socketData.send(r);
-			store.writeLog("Sending Record to UDP Server:  " + dataOut, DEFAULT_LOG_FILE);
+			store.writeLog("Sending Record to UDP Server on port:  " 
+			+ port + "with data: " + dataOut, DEFAULT_LOG_FILE);
 			r  = new DatagramPacket(buffer, buffer.length);
-			socketData.setSoTimeout(5000);
+			//socketData.setSoTimeout(5000);
 			socketData.receive(r);
 			String dataRe = new String(r.getData(), StandardCharsets.UTF_8);
 
 			returningString = dataRe.trim();
 			store.writeLog("Receiving Answer:  " + returningString + " from UDP Server", DEFAULT_LOG_FILE);
 			if(returningString.contains("Record Transfered")) {
+
+				int maxAttempt = 5;
+				int attmp = 0;
+				while(FindRecordWithId(recordFound.getRecordID()) != null) {
+					store.removeRecord(originalRecord);
+					cleanMemory();
+					buildfakeDatabase();
+					restoreFromStorage();
+					attmp++;
+					if(attmp > maxAttempt) {
+						store.writeLog("Failure to remove on local server", DEFAULT_LOG_FILE);
+						return "Failure to remove on local server";
+					}
+					wait(1000);
+				}
 				store.writeLog("Success in removing the record", DEFAULT_LOG_FILE);
-				store.removeRecord(recordFound);
-				cleanMemory();
-				buildfakeDatabase();
-				restoreFromStorage();
 				
 			}else {
 				store.writeLog("Failure in removing the record", DEFAULT_LOG_FILE);

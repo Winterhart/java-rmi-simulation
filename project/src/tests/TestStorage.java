@@ -25,10 +25,10 @@ class TestStorage {
 		
 		
 		Employee emp = new Employee("Vivian", 
-				"Bobinson", "ER45453", "Vivi@vlv.com", "P2222");
+				"Bobinson", "ER45453", "Vivi@vlv.com", "P22221");
 		
-		Project proj = new Project("P2222", "SuperClient", "AnotherBlockChain");
-		Project proj2 = new Project("P2344", "SuperClient2", "AnotherBlockChain2");
+		Project proj = new Project("P22221", "SuperClient", "AnotherBlockChain");
+		Project proj2 = new Project("P23441", "SuperClient2", "AnotherBlockChain2");
 		List<Project> projList = new ArrayList<Project>();
 		
 		projList.add(proj);
