@@ -31,6 +31,10 @@ module HrCenterApp{
     wstring transferRecord(in wstring managerID, in wstring recordID,
     in Location location);
 
+    wstring printAllRecords();
+
+    wstring printAllProjects();
+    
     oneway void shutdown(in wstring managerID);
 
     boolean managerLogin(in wstring managerID);

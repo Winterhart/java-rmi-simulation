@@ -161,12 +161,12 @@ public class HrManagerLauncher {
 	}
 
 	private static void printAllProject() {
-		// TODO Auto-generated method stub
+		System.out.println(currentSession.printAllProjects());
 		
 	}
 
 	private static void printAllRecords() {
-		// TODO Auto-generat1ed method stub
+		System.out.println(currentSession.printAllRecords());
 		
 	}
 

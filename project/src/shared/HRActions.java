@@ -933,6 +933,28 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		return welcomeStatus.toString();
 	}
 
+	@Override
+	public String printAllRecords() {
+		StringBuilder allRecords = new StringBuilder();
+		for(List<Record> list: db.values()) {
+			for(Record r: list) {
+				allRecords.append(r.toString());
+				allRecords.append("\n");
+			}
+		}
+		return allRecords.toString();
+	}
+
+	@Override
+	public String printAllProjects() {
+		StringBuilder allProjects = new StringBuilder();
+		for(Project p: dbProject) {
+			allProjects.append(p.toString());
+			allProjects.append("\n");
+		}
+		return allProjects.toString();
+	}
+
 
 	
 	
