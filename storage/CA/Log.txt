@@ -1207,3 +1207,34 @@ Restoring Data from Storage...    who: CA   when: Fri Oct 26 17:33:50 EDT 2018
 We have 2 records to restore    who: CA   when: Fri Oct 26 17:33:50 EDT 2018
 RecordIndex1    who: CA   when: Fri Oct 26 17:33:50 EDT 2018
 RecordIndex18    who: CA   when: Fri Oct 26 17:33:50 EDT 2018
+Building Database...    who: CA   when: Fri Oct 26 18:21:02 EDT 2018
+Restoring Data from Storage...    who: CA   when: Fri Oct 26 18:21:02 EDT 2018
+We have 2 records to restore    who: CA   when: Fri Oct 26 18:21:02 EDT 2018
+RecordIndex1    who: CA   when: Fri Oct 26 18:21:02 EDT 2018
+RecordIndex18    who: CA   when: Fri Oct 26 18:21:02 EDT 2018
+Building Database...    who: CA   when: Fri Oct 26 18:26:29 EDT 2018
+Restoring Data from Storage...    who: CA   when: Fri Oct 26 18:26:29 EDT 2018
+We have 2 records to restore    who: CA   when: Fri Oct 26 18:26:29 EDT 2018
+RecordIndex1    who: CA   when: Fri Oct 26 18:26:29 EDT 2018
+RecordIndex18    who: CA   when: Fri Oct 26 18:26:29 EDT 2018
+Building Database...    who: CA   when: Fri Oct 26 18:32:09 EDT 2018
+Restoring Data from Storage...    who: CA   when: Fri Oct 26 18:32:09 EDT 2018
+We have 2 records to restore    who: CA   when: Fri Oct 26 18:32:09 EDT 2018
+RecordIndex1    who: CA   when: Fri Oct 26 18:32:09 EDT 2018
+RecordIndex18    who: CA   when: Fri Oct 26 18:32:09 EDT 2018
+Building Database...    who: CA   when: Fri Oct 26 18:32:19 EDT 2018
+Restoring Data from Storage...    who: CA   when: Fri Oct 26 18:32:19 EDT 2018
+We have 2 records to restore    who: CA   when: Fri Oct 26 18:32:19 EDT 2018
+RecordIndex1    who: CA   when: Fri Oct 26 18:32:19 EDT 2018
+RecordIndex18    who: CA   when: Fri Oct 26 18:32:19 EDT 2018
+Building Database...    who: CA   when: Fri Oct 26 18:33:08 EDT 2018
+Restoring Data from Storage...    who: CA   when: Fri Oct 26 18:33:08 EDT 2018
+We have 2 records to restore    who: CA   when: Fri Oct 26 18:33:08 EDT 2018
+RecordIndex1    who: CA   when: Fri Oct 26 18:33:08 EDT 2018
+RecordIndex18    who: CA   when: Fri Oct 26 18:33:08 EDT 2018
+Server has been shutdown by: CA2779    who: CA   when: Fri Oct 26 18:33:32 EDT 2018
+Building Database...    who: CA   when: Fri Oct 26 18:33:54 EDT 2018
+Restoring Data from Storage...    who: CA   when: Fri Oct 26 18:33:54 EDT 2018
+We have 2 records to restore    who: CA   when: Fri Oct 26 18:33:54 EDT 2018
+RecordIndex1    who: CA   when: Fri Oct 26 18:33:54 EDT 2018
+RecordIndex18    who: CA   when: Fri Oct 26 18:33:54 EDT 2018

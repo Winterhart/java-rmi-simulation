@@ -37,14 +37,39 @@ public class Logger implements IStore {
 	public Logger(String name, String mainFolder) {
 		this.setStoreName(name);
 		this.currentTargetFolder = mainFolder;
+		buildDir(mainFolder);
+	}
+	
+	
+	public void buildDir(String mainFolder) {
+		File file = new File(mainFolder);
+		if(!file.isDirectory()) {
+			try {
+				file.mkdirs();
+				
+			}catch(Exception ee) {
+				System.out.println("ERROR in LOGGER constructor"+ ee.getMessage());
+			}
+
+		}
 	}
 
 	@Override
 	public void writeLog(String message, String fileName) {
-		
+		String target = currentTargetFolder +  fileName;
+		File file = new File(target);
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}
+		}
 		Date date = new Date();
 		try {
-			FileWriter writer = new FileWriter(currentTargetFolder +  fileName, true);
+			FileWriter writer = new FileWriter(target, true);
 			BufferedWriter bWriter = new BufferedWriter(writer);
 			bWriter.append(message);
 			bWriter.append("    who: " + storeName);

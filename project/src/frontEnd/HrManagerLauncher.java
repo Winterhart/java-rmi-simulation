@@ -8,19 +8,24 @@ import java.util.Scanner;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
+import Config.StorageConfig;
 import HrCenterApp.DEMS;
 import HrCenterApp.DEMSHelper;
 import HrCenterApp.DEMSPackage.Project;
 import model.Location;
+import storage.IStore;
+import storage.Logger;
 
 public class HrManagerLauncher {
 	 static DEMS currentSession = null;
 	 private static String loggedInManager;
 	 private static Location chosenLocation;
+	 private static IStore clientStore;
+	 private final static String DEFAULT_LOG = "Log.txt";
 	public static void main(String[] args) {
 		System.out.println("------------------------------------  Welcome Legaxy: The new Employee Management System (running with 90s tech) --------------------------------------");
 		try {
-
+			IStore storingEngine = new Logger("fff", StorageConfig.MAIN_TREE_FOLDER + "sss" + "/");
 			
 	    	System.out.println("Please choose a server: \n 1) CA \n 2) US \n 3) UK \n");
 	    	Scanner scanner = new Scanner(System.in);
@@ -52,6 +57,9 @@ public class HrManagerLauncher {
 	    	boolean loginSuccessful = currentSession.managerLogin(managerId);
 	    	if(loginSuccessful) {
 	    			loggedInManager = managerId;
+	    			clientStore = new Logger(loggedInManager, 
+	    					StorageConfig.CENTRAL_REPO_CLIENT + loggedInManager + "/");
+	    			clientStore.writeLog("Sucess login: " + loggedInManager, DEFAULT_LOG);
 	    			printLogo();
 	    			System.out.println("\n");
 	    			System.out.println(currentSession.getWelcomeMessage(managerId));
@@ -94,9 +102,11 @@ public class HrManagerLauncher {
 		    				break;
 		    			case 8:
 		    				shutdownServer();
+		    				clientStore.writeLog("Log out and shutdown" + loggedInManager, DEFAULT_LOG);
 		    				return;
 		    			case 9:
 		    				System.out.println("\n Bye bye ");
+		    				clientStore.writeLog("Log out " + loggedInManager, DEFAULT_LOG);
 		    				return;
 		    			default:
 		    				System.out.println("This choice doesn't exists...");
@@ -108,12 +118,14 @@ public class HrManagerLauncher {
 	    		
 	    	}else {
 				System.out.println("\n Oups managerId: " + managerId + " not found, please retry" );
+				clientStore.writeLog("Oups managerId: \" + managerId + \" not found, please retry\" " + loggedInManager, DEFAULT_LOG);
 	    		return;
 	    	}
 	    	
 		} catch (Exception e) {
 			System.out.println("Oups wrong input, please retry" );
 			e.printStackTrace();
+			clientStore.writeLog("Error client: " + e.getMessage(), DEFAULT_LOG);
 			return;
 		} 
 
@@ -154,18 +166,21 @@ public class HrManagerLauncher {
 		default:
 			System.out.println("Invalid location choice \n");
 		}
-		
+		clientStore.writeLog("Transfering a record with" +
+		recordId + " to " + cLocation, DEFAULT_LOG);
 		String status = currentSession.transferRecord(loggedInManager, recordId, cLocation);
 		System.out.println("Server: " + status);
 		
 	}
 
 	private static void printAllProject() {
+		clientStore.writeLog("print all project " + loggedInManager, DEFAULT_LOG);
 		System.out.println(currentSession.printAllProjects());
 		
 	}
 
 	private static void printAllRecords() {
+		clientStore.writeLog("print all records " + loggedInManager, DEFAULT_LOG);
 		System.out.println(currentSession.printAllRecords());
 		
 	}
@@ -189,12 +204,14 @@ public class HrManagerLauncher {
 			
 			if(changes.contains("mailID")) {
 				String[] changesSplit = changes.split(":");
+				clientStore.writeLog("Updating  " + recordId + " with " + changesSplit[1] , DEFAULT_LOG);
 				String status= currentSession.editRecord(recordId, "mailID", changesSplit[1], loggedInManager);
 				System.out.println("Current Status: " + status);
 			}
 			
 			if(changes.contains("projectID")) {
 				String[] changesSplit = changes.split(":");
+				clientStore.writeLog("Updating  " + recordId + " with " + changesSplit[1] , DEFAULT_LOG);
 				String status= currentSession.editRecord(recordId, "projectID", changesSplit[1], loggedInManager);
 				System.out.println("Current Status: " + status);
 			}
@@ -212,14 +229,18 @@ public class HrManagerLauncher {
 			
 			if(changes2.contains("mailID")) {
 				String[] changesSplit = changes2.split(":");
+				clientStore.writeLog("Updating  " + recordId2 + " with " + changesSplit[1] , DEFAULT_LOG);
 				String status= currentSession.editRecord(recordId2, "mailID", changesSplit[1], loggedInManager);
 				System.out.println("Current Status: " + status);
+				clientStore.writeLog("Current Status: " + status , DEFAULT_LOG);
 			}
 			
 			if(changes2.contains("location")) {
 				String[] changesSplit = changes2.split(":");
+				clientStore.writeLog("Updating  " + recordId2 + " with " + changesSplit[1] , DEFAULT_LOG);
 				String status= currentSession.editRecord(recordId2, "location", changesSplit[1], loggedInManager);
 				System.out.println("Current Status: " + status);
+				clientStore.writeLog("Current Status: " + status , DEFAULT_LOG);
 			}
 			break;
 		case 3:
@@ -235,14 +256,18 @@ public class HrManagerLauncher {
 			
 			if(changesPc.contains("clientName")) {
 				String[] changesSplit = changesPc.split(":");
+				clientStore.writeLog("Updating  " + projectID + " with " + changesSplit[1] , DEFAULT_LOG);
 				String status= currentSession.editRecord(projectID, "clientName", changesSplit[1], loggedInManager);
 				System.out.println("Current Status: " + status);
+				clientStore.writeLog("Current Status: " + status , DEFAULT_LOG);
 			}
 			
 			if(changesPc.contains("projectName")) {
 				String[] changesSplit = changesPc.split(":");
+				clientStore.writeLog("Updating  " + projectID + " with " + changesSplit[1] , DEFAULT_LOG);
 				String status= currentSession.editRecord(projectID, "projectName", changesSplit[1], loggedInManager);
 				System.out.println("Current Status: " + status);
+				clientStore.writeLog("Current Status: " + status , DEFAULT_LOG);
 			}
 			break;
 		case 4:
@@ -297,6 +322,7 @@ public class HrManagerLauncher {
     	String status = currentSession.createERecord(fName, lName, employeeID, email, projectID, loggedInManager);
     	
     	System.out.println("Server: " +  status);
+    	clientStore.writeLog("Current Status: " + status , DEFAULT_LOG);
 		
 	}
 
@@ -387,6 +413,7 @@ public class HrManagerLauncher {
     			loggedInManager);
     			
     	System.out.println("\n Server: " + status);
+    	clientStore.writeLog("Current Status: " + status , DEFAULT_LOG);
 		
 	}
 

@@ -330,3 +330,45 @@ The UDP Server for transfert record on: US is started on port 7776    who: Serve
 The UDP Server for: UK is start on port 4445    who: ServerConfigurator   when: Fri Oct 26 17:33:51 EDT 2018
 The UDP Server for transfert record on: UK is started on port 4443    who: ServerConfigurator   when: Fri Oct 26 17:33:51 EDT 2018
 The CORBA Server:  is on port:  1050    who: ServerConfigurator   when: Fri Oct 26 17:33:51 EDT 2018
+The UDP Server for: CA is start on port 5556    who: ServerConfigurator   when: Fri Oct 26 18:21:02 EDT 2018
+The UDP Server for transfert record on: CA is started on port 5554    who: ServerConfigurator   when: Fri Oct 26 18:21:02 EDT 2018
+The UDP Server for: US is start on port 7778    who: ServerConfigurator   when: Fri Oct 26 18:21:02 EDT 2018
+The UDP Server for transfert record on: US is started on port 7776    who: ServerConfigurator   when: Fri Oct 26 18:21:02 EDT 2018
+The UDP Server for: UK is start on port 4445    who: ServerConfigurator   when: Fri Oct 26 18:21:02 EDT 2018
+The UDP Server for transfert record on: UK is started on port 4443    who: ServerConfigurator   when: Fri Oct 26 18:21:02 EDT 2018
+The CORBA Server:  is on port:  1050    who: ServerConfigurator   when: Fri Oct 26 18:21:02 EDT 2018
+The UDP Server for: CA is start on port 5556    who: ServerConfigurator   when: Fri Oct 26 18:26:29 EDT 2018
+The UDP Server for transfert record on: CA is started on port 5554    who: ServerConfigurator   when: Fri Oct 26 18:26:29 EDT 2018
+The UDP Server for: US is start on port 7778    who: ServerConfigurator   when: Fri Oct 26 18:26:29 EDT 2018
+The UDP Server for transfert record on: US is started on port 7776    who: ServerConfigurator   when: Fri Oct 26 18:26:29 EDT 2018
+The UDP Server for: UK is start on port 4445    who: ServerConfigurator   when: Fri Oct 26 18:26:29 EDT 2018
+The UDP Server for transfert record on: UK is started on port 4443    who: ServerConfigurator   when: Fri Oct 26 18:26:29 EDT 2018
+The CORBA Server:  is on port:  1050    who: ServerConfigurator   when: Fri Oct 26 18:26:29 EDT 2018
+The UDP Server for: CA is start on port 5556    who: ServerConfigurator   when: Fri Oct 26 18:32:09 EDT 2018
+The UDP Server for transfert record on: CA is started on port 5554    who: ServerConfigurator   when: Fri Oct 26 18:32:09 EDT 2018
+The UDP Server for: US is start on port 7778    who: ServerConfigurator   when: Fri Oct 26 18:32:10 EDT 2018
+The UDP Server for transfert record on: US is started on port 7776    who: ServerConfigurator   when: Fri Oct 26 18:32:10 EDT 2018
+The UDP Server for: UK is start on port 4445    who: ServerConfigurator   when: Fri Oct 26 18:32:10 EDT 2018
+The UDP Server for transfert record on: UK is started on port 4443    who: ServerConfigurator   when: Fri Oct 26 18:32:10 EDT 2018
+The CORBA Server:  is on port:  1050    who: ServerConfigurator   when: Fri Oct 26 18:32:10 EDT 2018
+The UDP Server for: CA is start on port 5556    who: ServerConfigurator   when: Fri Oct 26 18:32:19 EDT 2018
+The UDP Server for transfert record on: CA is started on port 5554    who: ServerConfigurator   when: Fri Oct 26 18:32:19 EDT 2018
+The UDP Server for: US is start on port 7778    who: ServerConfigurator   when: Fri Oct 26 18:32:19 EDT 2018
+The UDP Server for transfert record on: US is started on port 7776    who: ServerConfigurator   when: Fri Oct 26 18:32:19 EDT 2018
+The UDP Server for: UK is start on port 4445    who: ServerConfigurator   when: Fri Oct 26 18:32:19 EDT 2018
+The UDP Server for transfert record on: UK is started on port 4443    who: ServerConfigurator   when: Fri Oct 26 18:32:19 EDT 2018
+The CORBA Server:  is on port:  1050    who: ServerConfigurator   when: Fri Oct 26 18:32:19 EDT 2018
+The UDP Server for: CA is start on port 5556    who: ServerConfigurator   when: Fri Oct 26 18:33:08 EDT 2018
+The UDP Server for transfert record on: CA is started on port 5554    who: ServerConfigurator   when: Fri Oct 26 18:33:08 EDT 2018
+The UDP Server for: US is start on port 7778    who: ServerConfigurator   when: Fri Oct 26 18:33:08 EDT 2018
+The UDP Server for transfert record on: US is started on port 7776    who: ServerConfigurator   when: Fri Oct 26 18:33:08 EDT 2018
+The UDP Server for: UK is start on port 4445    who: ServerConfigurator   when: Fri Oct 26 18:33:08 EDT 2018
+The UDP Server for transfert record on: UK is started on port 4443    who: ServerConfigurator   when: Fri Oct 26 18:33:08 EDT 2018
+The CORBA Server:  is on port:  1050    who: ServerConfigurator   when: Fri Oct 26 18:33:08 EDT 2018
+The UDP Server for: CA is start on port 5556    who: ServerConfigurator   when: Fri Oct 26 18:33:54 EDT 2018
+The UDP Server for transfert record on: CA is started on port 5554    who: ServerConfigurator   when: Fri Oct 26 18:33:54 EDT 2018
+The UDP Server for: US is start on port 7778    who: ServerConfigurator   when: Fri Oct 26 18:33:55 EDT 2018
+The UDP Server for transfert record on: US is started on port 7776    who: ServerConfigurator   when: Fri Oct 26 18:33:55 EDT 2018
+The UDP Server for: UK is start on port 4445    who: ServerConfigurator   when: Fri Oct 26 18:33:55 EDT 2018
+The UDP Server for transfert record on: UK is started on port 4443    who: ServerConfigurator   when: Fri Oct 26 18:33:55 EDT 2018
+The CORBA Server:  is on port:  1050    who: ServerConfigurator   when: Fri Oct 26 18:33:55 EDT 2018
