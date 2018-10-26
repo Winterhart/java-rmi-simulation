@@ -79,8 +79,8 @@ public class ServerConfigurator {
 			HRActions instanceHRAction = new HRActions(storingEngine);
 			ServerUDP udpObj = new RecordCounterUDP(instanceHRAction, udpPortCounter);
 			ServerUDP udpObjTransfer = new TransfertServerUDP(instanceHRAction, udpPortTransfert);
-			// Thread UDPCounterThread = new Thread(udpObj);
-			//Thread UDPTransfertThread  = new Thread(udpObjTransfer);
+			Thread UDPCounterThread = new Thread(udpObj);
+			Thread UDPTransfertThread  = new Thread(udpObjTransfer);
 			
 			// Starting the UDP process
 			String udpStartingMessage = "The UDP Server for: " + loca.toString() + 
@@ -88,8 +88,8 @@ public class ServerConfigurator {
 			String udpTransfertMessage = "The UDP Server for transfert record on: " + loca.toString() + 
 					" is started on port " + udpPortTransfert;
 			
-			// UDPCounterThread.start();
-			//UDPTransfertThread.start();
+			UDPCounterThread.start();
+			UDPTransfertThread.start();
 			
 			System.out.println(udpStartingMessage);
 			System.out.println(udpTransfertMessage);

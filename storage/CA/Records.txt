@@ -1,3 +1,4 @@
-Record:Bob|Bobinson|ER20321|bob.bobinson@bobbob.com|P00001
-Record:MR44300|CA3841|Bob|Scott|bbscott@dundermuflin.com|P00001|CA
-Record:MR10342|CA1135|SuperTest|BBo|goade@gma.com|P00222,|CA
+Record:MR33232|CA1135|Micheal|Scott|DataMike@dunderM.com|P2222,P2344,|CA
+Record:ER45453|Vivian|Bobinson|Vivi@vlv.com|P2222
+
+Record:ER12345|Marcel|Courage|superMarchel@marcel.com|P2222

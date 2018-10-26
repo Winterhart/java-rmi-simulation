@@ -18,15 +18,18 @@ public class HrManagerLauncher {
 	    	  demsImpl = getServerInstance(args, Location.CA);
 	    	  System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
 	    	  
-	    	  demsImpl = getServerInstance(args, Location.US);
-	    	  System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
+	    	  //demsImpl = getServerInstance(args, Location.US);
+	    	  //System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
 	    	  
-	    	  demsImpl = getServerInstance(args, Location.UK);
-	    	  System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
+	    	  //demsImpl = getServerInstance(args, Location.UK);
+	    	 // System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
 	    	  
+	    	  String createEmpl = demsImpl.createERecord("Marcel", "Courage", "ER12345",
+	    			  "superMarchel@marcel.com", "P2222", "CA1135");
+	    	  System.out.println(createEmpl);
 	    	  HrCenterApp.DEMSPackage.Location location = new HrCenterApp.DEMSPackage.Location("US");
 	    	  location.locationName = "US";
-	    	  String data = demsImpl.transferRecord("CA1135", "ER20321", location);
+	    	  String data = demsImpl.transferRecord("CA1135", "MR44551", location);
 	    	  String test21 = demsImpl.getRecordCounts("CA1135");
 	    	  System.out.println(test21);
 	    	  System.out.println(data);

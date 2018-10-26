@@ -323,7 +323,7 @@ public class Logger implements IStore {
 				record = new Record(recordAttrib[0]);
 			}else if(recordAttrib.length == 5) {
 				//It's an employee
-				record = new Employee(recordAttrib[2], recordAttrib[0], recordAttrib[1],
+				record = new Employee(recordAttrib[1], recordAttrib[2], recordAttrib[0],
 						recordAttrib[3], recordAttrib[4]);
 				
 			}else if(recordAttrib.length == 7) {
@@ -347,8 +347,14 @@ public class Logger implements IStore {
 						targetLocation = loc;
 					}
 				}
-				record = new Manager(recordAttrib[0], recordAttrib[1], recordAttrib[2],
-						recordAttrib[3], recordAttrib[4], managerProj, targetLocation);
+				record = new Manager(
+						recordAttrib[2],
+						recordAttrib[3], 
+						recordAttrib[0], 
+						recordAttrib[4], 
+						managerProj, 
+						targetLocation,
+						recordAttrib[1]);
 			}else {
 				writeLog("Problem restoring record with  " + record.toString(), "Log.txt");
 			}

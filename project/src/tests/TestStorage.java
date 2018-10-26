@@ -24,7 +24,6 @@ class TestStorage {
 		IStore storingEngine = new Logger("CA", MAIN_TREE_FOLDER + "CA" + "/");
 		
 		
-		Record rec1 = new Record("ER23933");
 		Employee emp = new Employee("Vivian", 
 				"Bobinson", "ER45453", "Vivi@vlv.com", "P2222");
 		
@@ -35,8 +34,8 @@ class TestStorage {
 		projList.add(proj);
 		projList.add(proj2);
 		
-		Manager mana = new Manager("MR33232", "CA3333", "Micheal", "Scott", 
-				"DataMike@dunderM.com", projList, Location.CA);
+		Manager mana = new Manager("Micheal", "Scott", "MR33232", 
+				"DataMike@dunderM.com", projList, Location.CA, "CA3333");
 		
 		storingEngine.addProject(proj);
 		storingEngine.addProject(proj2);
@@ -46,7 +45,6 @@ class TestStorage {
 			fail("No able to restore project");
 		}
 		
-		storingEngine.addRecord(rec1);
 		storingEngine.addRecord(mana);
 		storingEngine.addRecord(emp);
 		

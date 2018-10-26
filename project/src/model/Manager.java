@@ -61,9 +61,13 @@ public class Manager extends Record {
 
 
 	
-	public Manager(String recordId, String managerId, String firstName, 
-			String lastName, String mailID, 
-			List<Project> projects, Location location) {
+	public Manager(String firstName, 
+			String lastName, 
+			String recordId,
+			String mailID, 
+			List<Project> projects, 
+			Location location, 
+			String managerId) {
 		
 		super(recordId);
 		this.firstName = firstName;

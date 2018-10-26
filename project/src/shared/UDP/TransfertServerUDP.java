@@ -40,6 +40,8 @@ public class TransfertServerUDP extends ServerUDP implements Runnable {
 			
 		}catch(Exception ee) {
 			ee.printStackTrace();
+			super.serverStore.writeLog("UDP Server: " + ee.getMessage(), 
+					StorageConfig.CENTRAL_REPO_LOCATION);
 		}
 		
 	}

@@ -48,7 +48,7 @@ public class Employee extends Record {
 		this.employeeID = employeeID;
 	}
 
-	public Employee(String employeeId, String firstName, String lastName, String mailID, String projectID) {
+	public Employee(String firstName, String lastName, String employeeId, String mailID, String projectID) {
 		super(employeeId);
 		this.employeeID = employeeId;
 		this.firstName = firstName;

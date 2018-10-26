@@ -1,1 +1,3 @@
-Record:MR44343|US2844|Micheal|Scoot|mscott@dundermuflin.com|P00002,|US
+
+Record:ER20321|Bob|RTransfer|superTrans@gsam.com|P00002
+Record:MR44551|US5903|Fitch|Mini|superFitch@firm.com|P00002,P00002,|US

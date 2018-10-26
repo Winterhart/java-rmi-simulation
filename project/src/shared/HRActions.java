@@ -153,8 +153,14 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 				}
 			}
 			
-			newManager = new Manager(employeeIDUpper, generateUniqueManagerId(locationE.toString()),
-					firstName, lastName, mailID, projectToPassIn, locationE);
+			newManager = new Manager(
+					firstName, 
+					lastName, 
+					employeeIDUpper,
+					mailID, 
+					projectToPassIn,
+					locationE, 
+					generateUniqueManagerId(locationE.toString()));
 			
 			//Obtain first Letter of LastName for DB
 			String lowerLastName = lastName.toLowerCase();
@@ -238,7 +244,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			//Validate EmployeeID: (7 letters, "ER" at beginning, and not already taken)
 			String employeeIDUpper = employeeID.toUpperCase();
 			if(employeeIDUpper.length() != 7 || !employeeIDUpper.startsWith("ER")) {
-				store.writeLog("Employee ID not valid", DEFAULT_LOG_FILE);
+				store.writeLog("Employee ID not valid:  " + employeeIDUpper, DEFAULT_LOG_FILE);
 				return "Wrong EmployeeID format";
 			}
 			// If employee already exists... ?
@@ -262,7 +268,11 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			
 			
 			
-			newEmployee = new Employee(firstName.trim(), lastName.trim(), employeeID, mailID,
+			newEmployee = new Employee(
+					firstName.trim(), 
+					lastName.trim(), 
+					employeeID, 
+					mailID,
 					projectID);
 			//Obtain first Letter of LastName for DB
 			String lowerLastName = lastName.toLowerCase();
@@ -680,16 +690,23 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	public synchronized String receiveNewRecord(String recordString) {
 		
 		
-		String[] splittedRecords = recordString.split("Record:");
-		try {
+		String cleanedRecord = recordString.trim();
+		store.writeLog("Attempt to receive R with" + cleanedRecord, DEFAULT_LOG_FILE);
+		String[] splittedRecords =  cleanedRecord.split("Record:");
+
 			Record recordConvertedBack = null;
 			for(String s: splittedRecords) {
-				 recordConvertedBack = store.restoreRecordFromLine(s);
+				try {
+					 recordConvertedBack = store.restoreRecordFromLine(s);
+				}catch(Exception ee) {
+					store.writeLog("Can't restore record from " + s, DEFAULT_LOG_FILE);
+				}
+
 				 if(recordConvertedBack != null) {
 					 break;
 				 }
 			}
-			
+		try {
 			if(recordConvertedBack != null) {
 				Project sampleProject = dbProject.get(0);
 				if(recordConvertedBack instanceof Manager) {
@@ -723,11 +740,11 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 					}
 				}else {
 					Employee emp = (Employee) recordConvertedBack;
-					
+					store.writeLog("Attempt to transfert employee: " + emp.toString(), DEFAULT_LOG_FILE);
 					String creationStatus = this.createERecord(
 							emp.getFirstName(), 
 							emp.getLastName(), 
-							emp.getEmployeeID(), 
+							emp.getRecordID(), 
 							emp.getMailID(), 
 							sampleProject.getProjectID(), 
 							"UDP");
@@ -735,7 +752,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 					if(creationStatus.contains("created")) {
 						// Success 
 						store.writeLog("Sucess Receiving record: " + emp.getEmployeeID(), DEFAULT_LOG_FILE);
-						return "Record Transfered";
+						return "Record Transfered  .... ";
 						
 					}else {
 						store.writeLog("Record Refused by :" + store.getStorageName() + " Server because: " 
@@ -745,8 +762,8 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 					}
 				}
 			}
-			store.writeLog("Problem while Receiving record", DEFAULT_LOG_FILE);
-			return "Error while transfering the record";
+			store.writeLog("Problem while Receiving record, not able to parse", DEFAULT_LOG_FILE);
+			return "Error Record null";
 
 		}catch(Exception ee) {
 			store.writeLog("Problem while Receiving record: " + ee.getMessage(), DEFAULT_LOG_FILE);
@@ -790,15 +807,16 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		// Neutral Project Attribution
 		if(recordFound instanceof Manager) {
 			Manager castedManager = (Manager) recordFound;
-			Project emptyProj = new Project("EMPTY","EMPTY","EMPTY");
+			Project emptyProj = new Project("P0000","EMPTY","EMPTY");
 			List<Project> emptyProjects = new ArrayList<Project>();
 			emptyProjects.add(emptyProj);
 			castedManager.setCurrentProjects(emptyProjects);
 			
 		}else {
 			Employee castedEmpl = (Employee) recordFound;
-			castedEmpl.setProjectID("");
+			castedEmpl.setProjectID("P0000");
 		}
+		String dataOut = recordFound.toString();
 		
 		HashMap<Location, Integer> udpTransfertServer = PortConfiguration.getUdpTransfertConfig();
 		int port = udpTransfertServer.get(targetLocation);
@@ -810,19 +828,18 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		try {
 			InetAddress aHost = InetAddress.getByName("localhost");
 			socketData = new DatagramSocket();
-			StringBuilder builder = new StringBuilder();
-			builder.append(recordFound.toString());
-			buffer = builder.toString().getBytes();
+			buffer = dataOut.getBytes();
 			DatagramPacket r = new DatagramPacket(buffer, buffer.length, aHost, port);
 			socketData.send(r);
-
+			store.writeLog("Sending Record to UDP Server:  " + dataOut, DEFAULT_LOG_FILE);
 			r  = new DatagramPacket(buffer, buffer.length);
 			socketData.setSoTimeout(5000);
 			socketData.receive(r);
 			String dataRe = new String(r.getData(), StandardCharsets.UTF_8);
-			store.writeLog("Attempt to get Record on port  dataRe " + dataRe, DEFAULT_LOG_FILE);
+
 			returningString = dataRe.trim();
-			if(returningString.equalsIgnoreCase("Record Transfered")) {
+			store.writeLog("Receiving Answer:  " + returningString + " from UDP Server", DEFAULT_LOG_FILE);
+			if(returningString.contains("Record Transfered")) {
 				store.writeLog("Success in removing the record", DEFAULT_LOG_FILE);
 				store.removeRecord(recordFound);
 				cleanMemory();
@@ -831,7 +848,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 				
 			}else {
 				store.writeLog("Failure in removing the record", DEFAULT_LOG_FILE);
-				return "Ooups something wront happend";
+				return "Failure in removing the record" + returningString;
 			}
 
 		}catch(Exception ee) {
