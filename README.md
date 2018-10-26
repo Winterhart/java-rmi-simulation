@@ -17,6 +17,10 @@ the location of the `storage folder` and the `CENTRAL` folder.
 
 ## Start CORBA
 
+- You need eclipse
+- You need a copy of this repo.
+- You need Java from Oracle Java 8 should be fine
+
 #### Step 1: Start the ORB
 - Compile the `.idl` interface with: `idlj -fall yourname.idl`
 - Compile the `.java` files with: `javac *.java yournameApp/*.java`
@@ -24,7 +28,9 @@ the location of the `storage folder` and the `CENTRAL` folder.
 
 #### Step 2: Start the Server
 - You should start your server with: `java youServerName.java -ORBInitialPort 1050 &`
+- You could also use Eclipe and add as argument of the server `-ORBInitialPort 1050 &`
 
 #### Step 3: Start the Client
 - You should start the client with: `java youtClientName.java   -ORBInitialPort 1050 &`
+- You could also use Eclipe and add as argument of the client `-ORBInitialPort 1050 &`
 
