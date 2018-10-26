@@ -7,28 +7,26 @@ import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 import Config.PortConfiguration;
+import Config.StorageConfig;
 import HrCenterApp.DEMS;
 import HrCenterApp.DEMSHelper;
 import model.Location;
 import shared.HRActions;
 import shared.UDP.RecordCounterUDP;
+import shared.UDP.ServerUDP;
 import shared.UDP.TransfertServerUDP;
 import storage.IStore;
 import storage.Logger;
 
 public class ServerConfigurator {
 	
-	private String MAIN_TREE_FOLDER = 
-			"/home/winterhart/DEV/SOEN423/java-rmi-simulation/storage/";
-	
-	private String CENTRAL_REPO_LOCATION =
-			"/home/winterhart/DEV/SOEN423/java-rmi-simulation/storage/CENTRAL/";
+
 	
 	private IStore configStoring;
 	private ORB orb;
 	public ServerConfigurator() {
 		 configStoring	= 
-				new Logger("ServerConfigurator", CENTRAL_REPO_LOCATION);
+				new Logger("ServerConfigurator", StorageConfig.CENTRAL_REPO_LOCATION);
 	}
 	
 	 void configureCenter(String[] args) {
@@ -72,15 +70,17 @@ public class ServerConfigurator {
 	private void buildCenter(Location loca, int port, String[] args) {
 		
 		// Create and pass a storing engine to the HRAction
-		IStore storingEngine = new Logger(loca.toString(), MAIN_TREE_FOLDER + loca.toString() + "/");
+		IStore storingEngine = new Logger(loca.toString(), StorageConfig.MAIN_TREE_FOLDER + loca.toString() + "/");
 		
 		int udpPortCounter = port + 1;
 		int udpPortTransfert = port -1;
 		try {
-			
+
 			HRActions instanceHRAction = new HRActions(storingEngine);
-			Thread UDPCounterThread = new Thread(new RecordCounterUDP(instanceHRAction, udpPortCounter));
-			Thread UDPTransfertThread  = new Thread(new TransfertServerUDP(instanceHRAction, udpPortTransfert));
+			ServerUDP udpObj = new RecordCounterUDP(instanceHRAction, udpPortCounter);
+			ServerUDP udpObjTransfer = new TransfertServerUDP(instanceHRAction, udpPortTransfert);
+			// Thread UDPCounterThread = new Thread(udpObj);
+			//Thread UDPTransfertThread  = new Thread(udpObjTransfer);
 			
 			// Starting the UDP process
 			String udpStartingMessage = "The UDP Server for: " + loca.toString() + 
@@ -88,8 +88,8 @@ public class ServerConfigurator {
 			String udpTransfertMessage = "The UDP Server for transfert record on: " + loca.toString() + 
 					" is started on port " + udpPortTransfert;
 			
-			UDPCounterThread.start();
-			UDPTransfertThread.start();
+			// UDPCounterThread.start();
+			//UDPTransfertThread.start();
 			
 			System.out.println(udpStartingMessage);
 			System.out.println(udpTransfertMessage);

@@ -3,8 +3,14 @@ package shared.UDP;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.HashMap;
 
+import Config.PortConfiguration;
+import Config.StorageConfig;
+import model.Location;
 import shared.IHRActions;
+import storage.IStore;
+import storage.Logger;
 
 public class RecordCounterUDP extends ServerUDP implements Runnable {
 
@@ -32,7 +38,6 @@ public class RecordCounterUDP extends ServerUDP implements Runnable {
 			
 		}catch(Exception ee) {
 			ee.printStackTrace();
-			serverStore.writeLog("Problem with UDP Server: " + ee.getMessage(), "Log.txt");
 		}
 		
 	}

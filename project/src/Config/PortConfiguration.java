@@ -1,7 +1,6 @@
 package Config;
 
 import java.util.HashMap;
-
 import model.Location;
 
 public class PortConfiguration {
@@ -76,6 +75,15 @@ public class PortConfiguration {
 		
 		public static void addConfigUDPTransfert(Location loc, Integer port) {
 			getUdpTransfertConfig().put(loc, port);
+		}
+		
+		public static Location getLocationFromPort(HashMap<Location, Integer> mapping, Integer port) {
+			    for (Location loc : mapping.keySet()) {
+			      if (mapping.get(loc) == (port)) {
+			        return loc;
+			      }
+			    }
+			    return null;
 		}
 		
 }

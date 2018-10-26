@@ -13,10 +13,6 @@ public class HrManagerLauncher {
 	public static void main(String[] args) {
 		System.out.println("------------------------------------  Welcome Legaxy: The new Employee Management System (running with 90s tech) --------------------------------------");
 		try {
-			
-			 for(String s : args) {
-				 System.out.println(s);
-			 }
 			 DEMS demsImpl = null;;
 	    	  System.out.println("Start Hello Client" );
 	    	  demsImpl = getServerInstance(args, Location.CA);
@@ -27,7 +23,15 @@ public class HrManagerLauncher {
 	    	  
 	    	  demsImpl = getServerInstance(args, Location.UK);
 	    	  System.out.println(demsImpl.getWelcomeMessage("fakeManagerId"));
-			
+	    	  
+	    	  HrCenterApp.DEMSPackage.Location location = new HrCenterApp.DEMSPackage.Location("US");
+	    	  location.locationName = "US";
+	    	  String data = demsImpl.transferRecord("CA1135", "ER20321", location);
+	    	  String test21 = demsImpl.getRecordCounts("CA1135");
+	    	  System.out.println(test21);
+	    	  System.out.println(data);
+	    	  
+	    	  
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

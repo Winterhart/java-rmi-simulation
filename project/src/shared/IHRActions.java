@@ -71,7 +71,8 @@ public interface IHRActions extends DEMSOperations {
 	  */
 	 public void shutdown (String managerID);
 	 
-	 public  byte[] getLocalNumberOfRecords(String managerID); 
+	 public  byte[] getLocalNumberOfRecords(String managerID);
+	public String receiveNewRecord(String record); 
 	
 	
 

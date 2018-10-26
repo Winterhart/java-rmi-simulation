@@ -274,8 +274,10 @@ public class Logger implements IStore {
 				// Created project object from storage
 				Project projectCreated = new Project(
 						projAttrib[0], projAttrib[1],projAttrib[2]);
-				
-				returningProjects.add(projectCreated);
+				if(!returningProjects.contains(projectCreated)) {
+					returningProjects.add(projectCreated);
+				}
+
 						
 			}
 		}
@@ -286,55 +288,74 @@ public class Logger implements IStore {
 	@Override
 	public List<Record> restoreRecord() {
 		
-		List<Record> returningRecord = new ArrayList<Record>();
+		List<Record> returningRecords = new ArrayList<Record>();
 		String allRecord = readAllRecord();
 		String[] splittedRecords = allRecord.split("Record:");
 		for(String record: splittedRecords) {
-			String[] recordAttrib = record.split("\\|");
-			if(recordAttrib != null && recordAttrib.length > 0) {
-				
-				if(recordAttrib.length == 1 && !recordAttrib[0].isEmpty()) {
-					// It's a Record
-					Record rec = new Record(recordAttrib[0]);
-					returningRecord.add(rec);
-				}else if(recordAttrib.length == 5) {
-					//It's an employee
-					Employee emp = new Employee(recordAttrib[2], recordAttrib[0], recordAttrib[1],
-							recordAttrib[3], recordAttrib[4]);
-					returningRecord.add(emp);
-				}else if(recordAttrib.length == 7) {
-					// It's a Manager
-					List<Project> projects = restoreProject();
-					List<Project> managerProj = new ArrayList<Project>();
-					String[] projectIds = recordAttrib[5].split(",");
-					List<String> convertedProjects = Arrays.asList(projectIds);
-					for(Project prj: projects) {
-						
-						if(convertedProjects.contains(prj.getProjectID())) {
-							managerProj.add(prj);
-						}
-					}
-					// Find location
-					String loca = recordAttrib[6];
-					Location targetLocation = null;
-					for(Location loc: Location.values()) {
-						if(loca.equals(loc.toString())) {
-							targetLocation = loc;
-						}
-					}
-					Manager manager = new Manager(recordAttrib[0], recordAttrib[1], recordAttrib[2],
-							recordAttrib[3], recordAttrib[4], managerProj, targetLocation);
-					returningRecord.add(manager);
-				}else {
-					writeLog("Problem restoring record with  " + record.toString(), "Log.txt");
-				}
-				
-				
-			}
 			
+			Record recordToAdd = restoreRecordFromLine(record);
+			if(recordToAdd != null) {
+				if(!returningRecords.contains(returningRecords)) {
+					returningRecords.add(recordToAdd);
+				}
+
+			}
 		}
 		
-		return returningRecord;
+		return returningRecords;
+	}
+
+	@Override
+	public Record restoreRecordFromLine(String dataIn) {
+		String[] recordAttrib = dataIn.split("\\|");
+		Record record = null;
+		if(recordAttrib != null && recordAttrib.length > 0) {
+			
+			//Catch Corner case
+			if(recordAttrib.length == 1 && recordAttrib[0].equals("")) {
+				return record;
+			}
+			
+			if(recordAttrib.length == 1 && !recordAttrib[0].isEmpty() &&
+					recordAttrib[0].length() > 4) {
+				
+				// It's a Record
+				record = new Record(recordAttrib[0]);
+			}else if(recordAttrib.length == 5) {
+				//It's an employee
+				record = new Employee(recordAttrib[2], recordAttrib[0], recordAttrib[1],
+						recordAttrib[3], recordAttrib[4]);
+				
+			}else if(recordAttrib.length == 7) {
+				// It's a Manager
+				List<Project> projects = restoreProject();
+				List<Project> managerProj = new ArrayList<Project>();
+				String[] projectIds = recordAttrib[5].split(",");
+				List<String> convertedProjects = Arrays.asList(projectIds);
+				for(Project prj: projects) {
+					
+					if(convertedProjects.contains(prj.getProjectID()) && 
+							!managerProj.contains(prj)) {
+						managerProj.add(prj);
+					}
+				}
+				// Find location
+				String loca = recordAttrib[6];
+				Location targetLocation = null;
+				for(Location loc: Location.values()) {
+					if(loca.equals(loc.toString())) {
+						targetLocation = loc;
+					}
+				}
+				record = new Manager(recordAttrib[0], recordAttrib[1], recordAttrib[2],
+						recordAttrib[3], recordAttrib[4], managerProj, targetLocation);
+			}else {
+				writeLog("Problem restoring record with  " + record.toString(), "Log.txt");
+			}
+			
+			
+		}
+		return record;
 	}
 	
 	

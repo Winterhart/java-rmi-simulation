@@ -34,7 +34,9 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	private List<String> currentRecordID;
 	private List<String> currentProjectID;
 	private List<String> currentManagerID;
-	IStore store;
+	volatile IStore store;
+
+
 	private ORB orb;
 	
 	public HRActions(IStore storingEngine) {
@@ -52,9 +54,17 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	public void setORB(ORB orb) {
 		this.orb = orb;
 	}
-
-	private void restoreFromStorage() {
-		
+	public IStore getStore() {
+		return store;
+	}
+	
+	private void cleanMemory() {
+		dbProject.clear();
+		currentProjectID.clear();
+		db.clear();
+		currentRecordID.clear();
+	}
+	private void restoreFromStorage() {		
 		store.writeLog("Restoring Data from Storage...", DEFAULT_LOG_FILE);
 		List<Project> restoredProject = store.restoreProject();
 		for (Project project : restoredProject) {
@@ -633,7 +643,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		return foundRec;
 	}
 
-	boolean createProject(String projectID, String clientName, String projectName) {
+	synchronized boolean createProject(String projectID, String clientName, String projectName) {
 		store.writeLog("Attempt to write a new Project", DEFAULT_LOG_FILE);
 		char firstChar = projectID.toLowerCase().charAt(0);
 		if(projectID.length() != 6 || firstChar != 'p') {
@@ -659,20 +669,108 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		
 
 	}
+	
+	
+	/**
+	 * This method is made to receive a record from another place
+	 * @param recordString
+	 * @return message success or not
+	 */
+	@Override
+	public synchronized String receiveNewRecord(String recordString) {
+		
+		
+		String[] splittedRecords = recordString.split("Record:");
+		try {
+			Record recordConvertedBack = null;
+			for(String s: splittedRecords) {
+				 recordConvertedBack = store.restoreRecordFromLine(s);
+				 if(recordConvertedBack != null) {
+					 break;
+				 }
+			}
+			
+			if(recordConvertedBack != null) {
+				Project sampleProject = dbProject.get(0);
+				if(recordConvertedBack instanceof Manager) {
+					Manager man = (Manager) recordConvertedBack;
+					// Giving that manager a simple project
+
+					HrCenterApp.DEMSPackage.Project proj = new 
+							HrCenterApp.DEMSPackage.Project(sampleProject.getProjectID(), 
+									sampleProject.getClientName(), sampleProject.getProjectName());
+					HrCenterApp.DEMSPackage.Project[] newListProject = {proj};
+					HrCenterApp.DEMSPackage.Location currentLocation = 
+							new HrCenterApp.DEMSPackage.Location(store.getStorageName());
+					
+					String creationStatus =  this.createMRecord(
+							man.getFirstName(), 
+							man.getLastName(), 
+							man.getEmployeeID(),
+							man.getMailID(), 
+							newListProject,
+							currentLocation, 
+							"UDP");
+					if(creationStatus.contains("Manager created:")) {
+						// Success 
+						store.writeLog("Sucess Receiving record: " + man.getEmployeeID(), DEFAULT_LOG_FILE);
+						return "Record Transfered";
+					}else {
+						store.writeLog("Record Refused by :" + store.getStorageName() + " Server because: " 
+								+ creationStatus, DEFAULT_LOG_FILE);
+						return "Record Refused by :" + store.getStorageName() + " Server because: " 
+					+ creationStatus;
+					}
+				}else {
+					Employee emp = (Employee) recordConvertedBack;
+					
+					String creationStatus = this.createERecord(
+							emp.getFirstName(), 
+							emp.getLastName(), 
+							emp.getEmployeeID(), 
+							emp.getMailID(), 
+							sampleProject.getProjectID(), 
+							"UDP");
+					
+					if(creationStatus.contains("created")) {
+						// Success 
+						store.writeLog("Sucess Receiving record: " + emp.getEmployeeID(), DEFAULT_LOG_FILE);
+						return "Record Transfered";
+						
+					}else {
+						store.writeLog("Record Refused by :" + store.getStorageName() + " Server because: " 
+								+ creationStatus, DEFAULT_LOG_FILE);
+						return "Record Refused by :" + store.getStorageName() + " Server because: " 
+					+ creationStatus;
+					}
+				}
+			}
+			store.writeLog("Problem while Receiving record", DEFAULT_LOG_FILE);
+			return "Error while transfering the record";
+
+		}catch(Exception ee) {
+			store.writeLog("Problem while Receiving record: " + ee.getMessage(), DEFAULT_LOG_FILE);
+			ee.printStackTrace();
+			return "Error received method happend"  + ee.getMessage();
+		}
+		
+		
+
+	}
 
 	@Override
-	public String transferRecord(String managerID, String recordID,
+	public synchronized String transferRecord(String managerID, String recordID,
 			HrCenterApp.DEMSPackage.Location location) {
 
 		Location targetLocation = null;
 		Record recordFound = null;
 		recordFound = FindRecordWithId(recordID);
-		
 		if(recordFound == null) {
 			return "Could not find the record on the local server database";
 		}
 		store.writeLog("Attempt to transfert Record: " + recordFound.getRecordID()
 		 + " by: " + managerID, DEFAULT_LOG_FILE);
+		
 		
 		
 		
@@ -689,30 +787,57 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 			return "You can't transfer to your own server";
 		}
 		
+		// Neutral Project Attribution
+		if(recordFound instanceof Manager) {
+			Manager castedManager = (Manager) recordFound;
+			Project emptyProj = new Project("EMPTY","EMPTY","EMPTY");
+			List<Project> emptyProjects = new ArrayList<Project>();
+			emptyProjects.add(emptyProj);
+			castedManager.setCurrentProjects(emptyProjects);
+			
+		}else {
+			Employee castedEmpl = (Employee) recordFound;
+			castedEmpl.setProjectID("");
+		}
+		
 		HashMap<Location, Integer> udpTransfertServer = PortConfiguration.getUdpTransfertConfig();
 		int port = udpTransfertServer.get(targetLocation);
 		
 		String returningString = null;
-		byte[] buffer = new byte[200];
+		byte[] buffer = new byte[1000];
 		DatagramSocket socketData = null;		
-		byte[] dataReceived = new byte[200];
+		byte[] dataReceived = new byte[1000];
 		try {
 			InetAddress aHost = InetAddress.getByName("localhost");
 			socketData = new DatagramSocket();
-			buffer = "Haye haye".getBytes();
+			StringBuilder builder = new StringBuilder();
+			builder.append(recordFound.toString());
+			buffer = builder.toString().getBytes();
 			DatagramPacket r = new DatagramPacket(buffer, buffer.length, aHost, port);
 			socketData.send(r);
 
 			r  = new DatagramPacket(buffer, buffer.length);
-			socketData.setSoTimeout(3000);
+			socketData.setSoTimeout(5000);
 			socketData.receive(r);
 			String dataRe = new String(r.getData(), StandardCharsets.UTF_8);
 			store.writeLog("Attempt to get Record on port  dataRe " + dataRe, DEFAULT_LOG_FILE);
 			returningString = dataRe.trim();
-			System.out.println(returningString);
+			if(returningString.equalsIgnoreCase("Record Transfered")) {
+				store.writeLog("Success in removing the record", DEFAULT_LOG_FILE);
+				store.removeRecord(recordFound);
+				cleanMemory();
+				buildfakeDatabase();
+				restoreFromStorage();
+				
+			}else {
+				store.writeLog("Failure in removing the record", DEFAULT_LOG_FILE);
+				return "Ooups something wront happend";
+			}
 
 		}catch(Exception ee) {
+			store.writeLog("Problem while Transfering record " + ee.getMessage(), DEFAULT_LOG_FILE);
 			ee.printStackTrace();
+			return "Error in transfert " + ee.getMessage();
 		}
 		finally {
 			if(socketData != null) {
@@ -722,17 +847,17 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 		
 		
 		
-		return null;
+		return returningString;
 	}
 
 	@Override
-	public void shutdown(String managerID) {
+	public synchronized void shutdown(String managerID) {
 		store.writeLog("Server has been shutdown by: " + managerID, DEFAULT_LOG_FILE);
 		orb.shutdown(false);
 	}
 
 	@Override
-	public boolean managerLogin(String managerID) {
+	public synchronized boolean managerLogin(String managerID) {
 		List<Manager> allManagers = new ArrayList<Manager>();
 		allManagers = this.getAllManagers();
 		for(Manager manager: allManagers) {
@@ -768,7 +893,7 @@ public class HRActions  extends DEMSPOA implements IHRActions  {
 	}
 
 	@Override
-	public String getWelcomeMessage(String managerID) {
+	public synchronized String getWelcomeMessage(String managerID) {
 		StringBuilder welcomeStatus = new StringBuilder();
 		welcomeStatus.append("Welcome " + managerID + " to : " + this.store.getStorageName() + " center");
 		welcomeStatus.append(" currently have " + this.getNumberOfRecordsHelper() + " records");

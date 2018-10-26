@@ -29,5 +29,7 @@ public interface IStore {
 	
 	public List<Record> restoreRecord();
 	
+	public Record restoreRecordFromLine(String lineData);
+	
 	
 }
