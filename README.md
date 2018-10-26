@@ -10,8 +10,8 @@ This simulation is A1 of SOEN 423
 
 ### How to make it work ?
 - Download and Extract the `.zip` folder
-- You need to indicate some absolute path in the file `ServerConfigurator.java`
-you need to replace `MAIN_TREE_FOLDER` and `CENTRAL_REPO_LOCATION` by
+- You need to indicate some absolute path in the file `StorageConfig.java`
+you need to replace `MAIN_TREE_FOLDER`, `CENTRAL_REPO_CLIENT` and `CENTRAL_REPO_LOCATION` by
 the location of the `storage folder` and the `CENTRAL` folder.
 
 
