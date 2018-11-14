@@ -1,16 +1,17 @@
 package tests;
 
-
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
+import org.junit.jupiter.api.Test;
 
 class TestTransfertMethodUDP {
 
-
+	@Test
 	void TransfertUDPtest() {
 		
 		String dataOut = "Record:ER20321|Duke|Dukinson|DukeDuke@bobbob.com|";
@@ -34,11 +35,11 @@ class TestTransfertMethodUDP {
 				System.out.println("Success");
 				
 			}else {
-				//fail("Not able to make it...");
+				fail("Not able to make it...");
 			}
 
 		}catch(Exception ee) {
-			//fail("Not able to make it... " + ee.getMessage());
+			fail("Not able to make it... " + ee.getMessage());
 		}
 		finally {
 			if(socketData != null) {

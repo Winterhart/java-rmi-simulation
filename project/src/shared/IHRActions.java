@@ -1,11 +1,8 @@
 package shared;
+import HrCenterApp.DEMSOperations;
 import storage.IStore;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-
-@WebService
-public interface IHRActions  {
+public interface IHRActions extends DEMSOperations {
 	
 	IStore store = null;
 	
@@ -25,23 +22,26 @@ public interface IHRActions  {
 	 * @return The server returns information to the manager whether the operation
 	 *	was successful or not and both the server
 	 */
-	@WebMethod
 	 public String createMRecord (String firstName, String lastName, String employeeID, 
-			 String mailID, String projects,
-			 String location, String authorOfRequest);
+			 String mailID, HrCenterApp.DEMSPackage.Project[] projects, 
+			 HrCenterApp.DEMSPackage.Location location, String authorOfRequest);
 		/**
 		 * When a manager invokes this method from a ManagerClient, the server associated with
 		 *	this manager
+		 * @param firstName
+		 * @param lastName
+		 * @param employeeIDString createMRecord(String firstName, String lastName, 
+			String employeeID, String mailID, String managerID,  String location)
+		 * @param mailID
+		 * @param ProjectID
 		 * @return The server returns information to the manager whether the operation was successful or not
 		 */
-	@WebMethod
 	 public String createERecord (String firstName, String lastName, String employeeID, String mailID, String projectID, String managerID);
 		/**
 		 * Finds out the number of records (both MR and ER)
 		 * 
 		 * @return it should return the following: CA 6, US 7, UK 8.
 		 */
-	@WebMethod
 	 public String getRecordCounts (String managerID);
 		
 		/**
@@ -55,7 +55,6 @@ public interface IHRActions  {
 		 * @return Upon success
 			or failure, it returns a message to the manager and the logs are updated
 		 */
-		@WebMethod
 	 public String editRecord (String recordID, String fieldName, String newValue, String managerID);
 	 /**
 	  * When a HR manager invokes this method from his/her center, the server associated
@@ -65,26 +64,16 @@ public interface IHRActions  {
 	  *	remoteCenterServer. If the record does not exist in the remoteCenterServer, then the
 	  *	entire record is transferred to the remoteCenterServer.
 	  */
-	 @WebMethod
 	 public String transferRecord (String managerID, String recordID, 
-			 String location);
+			 HrCenterApp.DEMSPackage.Location location);
 	 /**
 	  * Shut down the entire system...
 	  */
-
-	 @WebMethod
+	 public void shutdown (String managerID);
+	 
 	 public  byte[] getLocalNumberOfRecords(String managerID);
-
-	public String receiveNewRecord(String record);
-    @WebMethod
-    public String printAllProjects();
-
-    @WebMethod
-    public String printAllRecords();
-
-    @WebMethod
-    public String getWelcomeMessage(String managerID);
-
-
+	public String receiveNewRecord(String record); 
+	
+	
 
 }

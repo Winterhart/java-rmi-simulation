@@ -14,7 +14,11 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.omg.CORBA.ORB;
+
 import Config.PortConfiguration;
+import HrCenterApp.DEMSPOA;
+import HrCenterApp.DEMSPackage.ServerLocation;
 import model.Employee;
 import model.Location;
 import model.Manager;
@@ -22,10 +26,7 @@ import model.Project;
 import model.Record;
 import storage.IStore;
 
-import javax.jws.WebService;
-
-@WebService(endpointInterface = "shared.HRActions")
-public class HRActions implements IHRActions  {
+public class HRActions  extends DEMSPOA implements IHRActions  {
 
 	private String DEFAULT_LOG_FILE = "Log.txt";
 	private  Map<Integer, ArrayList<Record>> db;
@@ -36,9 +37,11 @@ public class HRActions implements IHRActions  {
 	IStore store;
 
 
-
-	public HRActions() {
+	private ORB orb;
+	
+	public HRActions(IStore storingEngine) {
 		super();
+		this.store = storingEngine;
 		db = new HashMap<Integer, ArrayList<Record>>();
 		dbProject = new ArrayList<Project>();
 		currentRecordID = new ArrayList<String>();
@@ -47,11 +50,10 @@ public class HRActions implements IHRActions  {
 		buildfakeDatabase();
 		restoreFromStorage();
 	}
-
-	public void setStore(IStore sto) {
-	    this.store = sto;
-    }
-
+	
+	public void setORB(ORB orb) {
+		this.orb = orb;
+	}
 	public IStore getStore() {
 		return store;
 	}
@@ -112,7 +114,8 @@ public class HRActions implements IHRActions  {
 
 	@Override
 	public synchronized String createMRecord (String firstName, String lastName, String employeeID, 
-			String mailID, String projects, String location, String managerAuthorOfRequest){
+			String mailID, HrCenterApp.DEMSPackage.Project[] projects, 
+			HrCenterApp.DEMSPackage.Location location, String managerAuthorOfRequest){
 		
 		store.writeLog("Attempt to write a new Manager: " + managerAuthorOfRequest , DEFAULT_LOG_FILE);
 		Manager newManager = null;
@@ -147,12 +150,10 @@ public class HRActions implements IHRActions  {
 			// Make sure location is real
 			Location locationE = null;
 			for(Location loc: Location.values()) {
-				if(loc.toString().equals(location)) {
+				if(loc.toString().equals(location.locationName)) {
 					locationE = loc;
 				}
 			}
-
-
 			
 			newManager = new Manager(
 					firstName, 
@@ -208,14 +209,12 @@ public class HRActions implements IHRActions  {
 
 	}
 
-	private List<String> ConvertToInternalProjectObj(String projects) {
+	private List<String> ConvertToInternalProjectObj(HrCenterApp.DEMSPackage.Project[] projects) {
 		List<String> createdProject = new ArrayList<String>();
-		String[] projectSplitted = projects.split("$");
-		for(String proj: projectSplitted) {
-		    String[] projAttrib = proj.split("#");
-			boolean projCreated = createProject(projAttrib[0], projAttrib[1], projAttrib[2]);
+		for(HrCenterApp.DEMSPackage.Project proj: projects) {
+			boolean projCreated = createProject(proj.projectID, proj.clientName, proj.projectName);
 			if(projCreated) {
-				createdProject.add(projAttrib[0]);
+				createdProject.add(proj.projectID);
 			}
 		}
 		return createdProject;
@@ -536,11 +535,14 @@ public class HRActions implements IHRActions  {
 			Manager tmpMan = (Manager)mrecord;
 			int indexList = getIndexFirstLetter(tmpMan.getLastName().toLowerCase());
 			ArrayList<Record>tmpList = db.get(indexList);
-
-            if(fieldName.equals("location")) {
+		
+			if(fieldName.equals("location")) {
+				
+				HrCenterApp.DEMSPackage.Location formatedLocation = 
+						new HrCenterApp.DEMSPackage.Location(value);
 				tmpMan.setManagerID(generateUniqueManagerId(value));
 				//TODO: Using UDP/IP create a new Manager on the other Server 
-				String status = this.transferRecord(managerId, mrecord.getRecordID(), value.toString());
+				String status = this.transferRecord(managerId, mrecord.getRecordID(), formatedLocation);
 				store.writeLog("Manager Transfering: " + status, DEFAULT_LOG_FILE);	
 				
 				if(!status.contains("Record Transfered")) {
@@ -714,23 +716,21 @@ public class HRActions implements IHRActions  {
 					Manager man = (Manager) recordConvertedBack;
 					// Giving that manager a simple project
 
-//					HrCenterApp.DEMSPackage.Project proj = new
-//							HrCenterApp.DEMSPackage.Project(sampleProject.getProjectID(),
-//									sampleProject.getClientName(), sampleProject.getProjectName());
-//					HrCenterApp.DEMSPackage.Project[] newListProject = {proj};
-//					HrCenterApp.DEMSPackage.Location currentLocation =
-//							new HrCenterApp.DEMSPackage.Location(store.getStorageName());
-//
-//					String creationStatus =  this.createMRecord(
-//							man.getFirstName(),
-//							man.getLastName(),
-//							man.getEmployeeID(),
-//							man.getMailID(),
-//							newListProject,
-//							currentLocation,
-//							"UDP");
-
-                    String creationStatus = "Manager created";
+					HrCenterApp.DEMSPackage.Project proj = new 
+							HrCenterApp.DEMSPackage.Project(sampleProject.getProjectID(), 
+									sampleProject.getClientName(), sampleProject.getProjectName());
+					HrCenterApp.DEMSPackage.Project[] newListProject = {proj};
+					HrCenterApp.DEMSPackage.Location currentLocation = 
+							new HrCenterApp.DEMSPackage.Location(store.getStorageName());
+					
+					String creationStatus =  this.createMRecord(
+							man.getFirstName(), 
+							man.getLastName(), 
+							man.getEmployeeID(),
+							man.getMailID(), 
+							newListProject,
+							currentLocation, 
+							"UDP");
 					if(creationStatus.contains("Manager created:")) {
 						// Success 
 						store.writeLog("Sucess Receiving record: " + man.getEmployeeID() + " " + creationStatus, DEFAULT_LOG_FILE);
@@ -780,7 +780,7 @@ public class HRActions implements IHRActions  {
 
 	@Override
 	public synchronized String transferRecord(String managerID, String recordID,
-			String location) {
+			HrCenterApp.DEMSPackage.Location location) {
 
 		Location targetLocation = null;
 		Record originalRecord = null;
@@ -797,7 +797,7 @@ public class HRActions implements IHRActions  {
 		
 		
 		for(Location loc: Location.values()) {
-			if(location.equalsIgnoreCase(loc.toString())) {
+			if(location.locationName.equalsIgnoreCase(loc.toString())) {
 				targetLocation = loc;
 			}
 		}
@@ -881,6 +881,24 @@ public class HRActions implements IHRActions  {
 		
 		
 		return returningString;
+	}
+
+	@Override
+	public synchronized void shutdown(String managerID) {
+		store.writeLog("Server has been shutdown by: " + managerID, DEFAULT_LOG_FILE);
+		orb.shutdown(false);
+	}
+
+	@Override
+	public synchronized boolean managerLogin(String managerID) {
+		List<Manager> allManagers = new ArrayList<Manager>();
+		allManagers = this.getAllManagers();
+		for(Manager manager: allManagers) {
+			if(manager.getManagerID().equalsIgnoreCase(managerID)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private List<Manager> getAllManagers() {

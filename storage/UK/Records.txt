@@ -1,3 +1,2 @@
 Record:ER20321|Bob|RTransfer|superTrans@gsam.com|P00003
 
-Record:MR56567|UK5652|Paul| Foobar|foobar@mfail.com|P00003,|UK
