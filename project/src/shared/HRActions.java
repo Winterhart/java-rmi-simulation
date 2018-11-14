@@ -18,7 +18,6 @@ import org.omg.CORBA.ORB;
 
 import Config.PortConfiguration;
 import HrCenterApp.DEMSPOA;
-import HrCenterApp.DEMSPackage.ServerLocation;
 import model.Employee;
 import model.Location;
 import model.Manager;
